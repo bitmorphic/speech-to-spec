@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useSettings } from './SettingsContext';
 
@@ -20,27 +21,40 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
   const isAbout = pathname === '/about';
 
   return (
-    <header className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur sticky top-0 z-30 font-sans">
-      <div className="mx-auto px-4 sm:px-6 h-14 flex items-center justify-between max-w-7xl">
-        {/* Brand & Nav */}
+    <header className="border-b border-[#E4E2DA] bg-[#FFFFFF]/90 backdrop-blur-md sticky top-0 z-30 font-sans">
+      <div className="mx-auto px-4 sm:px-6 h-16 flex items-center justify-between max-w-7xl">
+        {/* Brand & Subtitle */}
         <div className="flex items-center gap-4 sm:gap-6">
           <Link
             href="/"
-            className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded"
+            className="flex items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]"
           >
-            <span className="font-mono text-xs sm:text-sm tracking-tight text-cyan-400 font-bold border border-cyan-500/30 bg-cyan-950/40 px-2 py-0.5 rounded">
-              Speech to Spec
-            </span>
+            {/* Logo Image */}
+            <div className="relative h-6 w-auto shrink-0 flex items-center">
+              <img
+                src="/logo/speech-to-spec-logo-light.svg"
+                alt="Speech to Spec Logo"
+                className="h-5 w-auto object-contain"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
+              <span className="font-sans text-sm font-semibold tracking-tight text-[#1B1B18]">
+                Speech to Spec
+              </span>
+              <span className="text-[11px] text-[#6B6A63] font-normal hidden sm:inline">
+                Voice Requirements Linter
+              </span>
+            </div>
           </Link>
 
           {/* Simple Navigation: Workspace, Proof, About */}
-          <nav aria-label="Main Navigation" className="flex items-center gap-1 sm:gap-2">
+          <nav aria-label="Main Navigation" className="flex items-center gap-1 sm:gap-1.5 ml-2">
             <Link
               href="/"
-              className={`px-2.5 py-1 text-xs font-mono rounded transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none ${
+              className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${
                 isWorkspace
-                  ? 'bg-zinc-800/80 text-cyan-300 font-semibold border border-zinc-700/60'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                  ? 'bg-[#1B1B18] text-white'
+                  : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
               }`}
             >
               Workspace
@@ -48,10 +62,10 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
 
             <Link
               href="/proof"
-              className={`px-2.5 py-1 text-xs font-mono rounded transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none ${
+              className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${
                 isProof
-                  ? 'bg-zinc-800/80 text-cyan-300 font-semibold border border-zinc-700/60'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                  ? 'bg-[#1B1B18] text-white'
+                  : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
               }`}
             >
               Proof
@@ -59,10 +73,10 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
 
             <Link
               href="/about"
-              className={`px-2.5 py-1 text-xs font-mono rounded transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none ${
+              className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${
                 isAbout
-                  ? 'bg-zinc-800/80 text-cyan-300 font-semibold border border-zinc-700/60'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                  ? 'bg-[#1B1B18] text-white'
+                  : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
               }`}
             >
               About
@@ -71,18 +85,18 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
         </div>
 
         {/* Right Actions: Recent, Settings Gear */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2">
           {onOpenRecent && (
             <button
               type="button"
               onClick={onOpenRecent}
-              className="px-2.5 py-1 text-xs font-mono text-zinc-300 hover:text-zinc-100 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded transition flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+              className="px-3 py-1.5 text-xs text-[#1B1B18] bg-white hover:bg-[#F7F6F3] border border-[#E4E2DA] rounded-full transition-colors flex items-center gap-1.5 font-medium shadow-xs focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
               title="View recent sessions stored in this browser"
               aria-label="Open recent sessions drawer"
             >
               <span>Recent</span>
               {recentCount > 0 && (
-                <span className="w-4 h-4 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-700/80 text-[10px] font-bold flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-[#1B1B18] text-white text-[10px] font-mono flex items-center justify-center">
                   {recentCount}
                 </span>
               )}
@@ -93,22 +107,22 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
           <button
             type="button"
             onClick={() => setIsSettingsOpen(true)}
-            className="p-1.5 rounded-lg text-zinc-300 hover:text-zinc-100 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 transition relative focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+            className="p-2 rounded-full text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE] border border-[#E4E2DA] transition-colors relative focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none bg-white shadow-xs"
             title="Open Settings"
             aria-label="Open settings"
           >
             <svg
-              className="w-4 h-4 text-zinc-300"
+              className="w-4 h-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
+              strokeWidth={1.75}
               aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
               />
               <path
                 strokeLinecap="round"
@@ -118,7 +132,7 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
             </svg>
             {userApiKey && (
               <span
-                className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-cyan-400 ring-2 ring-zinc-950"
+                className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#2563EB] ring-2 ring-white"
                 title="Custom Groq API Key active in memory"
               />
             )}
@@ -128,7 +142,7 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
 
       {/* Stepper sub-nav if provided */}
       {stepperSlot && (
-        <div className="border-t border-zinc-800/80 bg-zinc-950/60 px-4 sm:px-6 py-2">
+        <div className="border-t border-[#E4E2DA]/80 bg-[#F7F6F3]/70 px-4 sm:px-6 py-2">
           <div className="mx-auto max-w-7xl flex items-center justify-between">
             {stepperSlot}
           </div>
@@ -137,4 +151,3 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
     </header>
   );
 }
-

@@ -32,7 +32,7 @@ const DIAGRAMS_SYSTEM_INSTRUCTION =
   'Given an engineering specification markdown, generate two clean, strictly valid Mermaid diagram strings:\n\n' +
   '1. flowchart: A flowchart of the main user flow and key screen transitions. It MUST start with "flowchart TD" or "flowchart LR". ' +
   'All node labels containing spaces, punctuation, or parentheses MUST be enclosed in double quotes, e.g. NodeId["Node Label (details)"]. ' +
-  'Use simple alphanumeric IDs for nodes (A, B, C or Step1, Step2).\n\n' +
+  'Use simple alphanumeric IDs for nodes (A, B, C or Step1, Step2). Put each node connection on its own line.\n\n' +
   '2. erDiagram: An entity-relationship diagram of data models and storage entities. It MUST start with "erDiagram". ' +
   'Entities must list fields with types, e.g.:\n' +
   '  USER {\n' +
@@ -40,8 +40,10 @@ const DIAGRAMS_SYSTEM_INSTRUCTION =
   '    string name\n' +
   '  }\n\n' +
   'CRITICAL MERMAID SYNTAX RULES:\n' +
+  '- Put each flowchart statement on a separate NEW line. Never join multiple connections on one line.\n' +
   '- NEVER produce empty node labels like [""], (\'\'), or {""}. All nodes must have descriptive text, e.g. End1["End"] or Terminal["Exit"].\n' +
   '- Do NOT use comparison symbols (<, >) inside node labels or edge labels; write "is greater than" or "above" instead of ">" (e.g. NetDebtCond{"Net debt above 500?"}).\n' +
+  '- In erDiagram, NEVER use square brackets [] for array types (use "string_array" or "string" instead of "string[]"). Never put brackets after types.\n' +
   '- A single per-level secret (such as an admin PIN) must not be modeled as an entity related to every user. Put it as an attribute of a setting entity and never mark a secret as a primary key.\n' +
   '- Return RAW Mermaid code in the strings. DO NOT wrap with markdown backticks (no ```mermaid or ```).\n' +
   '- Do NOT use HTML tags or forbidden characters inside labels.\n' +
@@ -173,6 +175,9 @@ export function cleanFlowchart(raw: string): string {
     cleaned = cleaned.replace(/```$/, '');
   }
   cleaned = cleaned.trim();
+
+  // Split multiple statements smashed on the same line (e.g. End1[""] Home --> ...)
+  cleaned = cleaned.replace(/(\]|[\}\)])\s+([a-zA-Z0-9_-]+\s*-->)/g, '$1\n  $2');
 
   // Fix empty node labels on flowchart nodes, e.g. NodeId[""] or NodeId[''] or NodeId[]
   cleaned = cleaned.replace(/([a-zA-Z0-9_-]+)\[\s*["']?\s*["']?\s*\]/g, '$1["End"]');

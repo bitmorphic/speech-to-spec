@@ -40,6 +40,9 @@ export function sanitizeFlowchart(raw: string | null | undefined): string {
     cleaned = `flowchart TD\n${cleaned}`;
   }
 
+  // 0. Split multiple statements smashed on the same line (e.g. End1[""] Home --> ...)
+  cleaned = cleaned.replace(/(\]|[\}\)])\s+([a-zA-Z0-9_-]+\s*-->)/g, '$1\n  $2');
+
   // 1. Fix empty node labels like NodeId[""] or NodeId[''] or NodeId[]
   cleaned = cleaned.replace(/([a-zA-Z0-9_-]+)\[\s*["']?\s*["']?\s*\]/g, '$1["End"]');
   cleaned = cleaned.replace(/([a-zA-Z0-9_-]+)\(\s*["']?\s*["']?\s*\)/g, '$1("End")');
@@ -145,9 +148,18 @@ export function DiagramsViewer({
         const mermaid = (await import('mermaid')).default;
         mermaid.initialize({
           startOnLoad: false,
-          theme: 'dark',
+          theme: 'neutral',
           securityLevel: 'loose',
-          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+          fontFamily: 'Instrument Sans, system-ui, sans-serif',
+          themeVariables: {
+            background: '#F8F8F7',
+            primaryColor: '#FFFFFF',
+            primaryTextColor: '#1B1B18',
+            primaryBorderColor: '#E4E2DA',
+            lineColor: '#1B1B18',
+            secondaryColor: '#F7F6F3',
+            tertiaryColor: '#FFFFFF',
+          },
         });
 
         // 1. Render Flowchart
@@ -240,22 +252,22 @@ export function DiagramsViewer({
   const hasDiagrams = Boolean(flowchart || erDiagram);
 
   return (
-    <div className="flex flex-col gap-6" ref={containerRef}>
+    <div className="flex flex-col gap-6 font-sans text-[#1B1B18]" ref={containerRef}>
       {/* Header toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-lg border border-zinc-800 bg-zinc-900/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-[16px] border border-[#E4E2DA] bg-white shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-semibold text-zinc-100">
-              Architecture Diagrams
+            <h3 className="text-sm font-semibold text-[#1B1B18]">
+              Architecture diagrams
             </h3>
             {hasDiagrams && (
-              <span className="px-2 py-0.5 rounded-full text-[11px] font-mono bg-cyan-950/60 border border-cyan-800/80 text-cyan-300">
-                User Flow &amp; Data Model
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] bg-[#F3F2EE] border border-[#E4E2DA] text-[#6B6A63] font-medium">
+                User flow &amp; data model
               </span>
             )}
           </div>
-          <p className="text-xs text-zinc-400 mt-1">
-            Visual representations rendered in browser via Mermaid.
+          <p className="text-xs text-[#6B6A63] mt-0.5 font-sans">
+            Visual representations rendered in browser via Mermaid in light theme.
           </p>
         </div>
 
@@ -265,9 +277,9 @@ export function DiagramsViewer({
               type="button"
               onClick={onGenerate}
               disabled={isLoading || !specMarkdown}
-              className="px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider bg-cyan-500 hover:bg-cyan-400 text-zinc-950 rounded transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-cyan-950/40 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+              className="px-4 py-2 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed shadow-xs focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
             >
-              {isLoading ? 'Generating Diagrams...' : 'Generate Diagrams'}
+              {isLoading ? 'Generating diagrams...' : 'Generate diagrams'}
             </button>
           ) : (
             <>
@@ -275,7 +287,7 @@ export function DiagramsViewer({
                 <button
                   type="button"
                   onClick={handleDownloadMmd}
-                  className="px-3 py-1.5 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 rounded transition flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+                  className="px-3 py-1.5 text-xs font-sans bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-xl transition flex items-center gap-1.5 shadow-xs focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none font-medium"
                   title="Download raw Mermaid diagram file"
                 >
                   Download .mmd
@@ -286,7 +298,7 @@ export function DiagramsViewer({
                 <button
                   type="button"
                   onClick={handleDownloadSvg}
-                  className="px-3 py-1.5 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 rounded transition flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+                  className="px-3 py-1.5 text-xs font-sans bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-xl transition flex items-center gap-1.5 shadow-xs focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none font-medium"
                   title="Download scalable vector graphic"
                 >
                   Download SVG
@@ -297,7 +309,7 @@ export function DiagramsViewer({
                 type="button"
                 onClick={onGenerate}
                 disabled={isLoading}
-                className="px-3 py-1.5 text-xs font-mono text-zinc-400 hover:text-zinc-200 border border-zinc-800 hover:bg-zinc-800 rounded transition"
+                className="px-3 py-1.5 text-xs font-sans text-[#6B6A63] hover:text-[#1B1B18] border border-[#E4E2DA] hover:bg-[#F7F6F3] rounded-xl transition font-medium"
                 title="Regenerate diagrams"
               >
                 {isLoading ? 'Regenerating...' : 'Regenerate'}
@@ -309,19 +321,19 @@ export function DiagramsViewer({
 
       {/* Error state */}
       {error && (
-        <div className="p-3.5 rounded-lg border border-rose-900/60 bg-rose-950/40 text-xs font-mono text-rose-300">
-          <strong className="font-bold">Error:</strong> {error}
+        <div className="p-4 rounded-[16px] border border-rose-200 bg-rose-50 text-xs text-rose-900 font-sans">
+          <strong className="font-semibold">Error:</strong> {error}
         </div>
       )}
 
       {/* Empty placeholder */}
       {!hasDiagrams && !isLoading && !error && (
-        <div className="p-8 rounded-lg border border-dashed border-zinc-800 bg-zinc-900/20 text-center flex flex-col items-center gap-2">
-          <p className="text-sm font-medium text-zinc-300">
+        <div className="p-8 rounded-[16px] border border-dashed border-[#E4E2DA] bg-[#F7F6F3] text-center flex flex-col items-center gap-2">
+          <p className="text-sm font-medium text-[#1B1B18]">
             No architecture diagrams generated yet
           </p>
-          <p className="text-xs text-zinc-500 max-w-md">
-            Click &quot;Generate Diagrams&quot; to inspect specification flows and entities, creating an interactive user flow chart and entity-relationship diagram.
+          <p className="text-xs text-[#6B6A63] max-w-md">
+            Click &quot;Generate diagrams&quot; to inspect specification flows and entities, creating an interactive user flow chart and entity-relationship diagram.
           </p>
         </div>
       )}
@@ -329,8 +341,8 @@ export function DiagramsViewer({
       {/* Loading state */}
       {isLoading && (
         <div className="flex flex-col gap-4 animate-pulse">
-          <div className="h-10 w-60 rounded bg-zinc-900 border border-zinc-800/80" />
-          <div className="h-80 rounded-lg bg-zinc-900/60 border border-zinc-800/80" />
+          <div className="h-10 w-60 rounded-[16px] bg-[#F3F2EE] border border-[#E4E2DA]" />
+          <div className="h-80 rounded-[16px] bg-white border border-[#E4E2DA]" />
         </div>
       )}
 
@@ -338,56 +350,56 @@ export function DiagramsViewer({
       {hasDiagrams && !isLoading && (
         <div className="flex flex-col gap-4">
           {/* Sub-tabs: User Flow vs Entity Relationship */}
-          <div className="flex items-center gap-2 border-b border-zinc-800 pb-2">
+          <div className="flex items-center gap-2 border-b border-[#E4E2DA] pb-2">
             <button
               type="button"
               onClick={() => setActiveTab('flowchart')}
-              className={`px-3 py-1.5 rounded text-xs font-mono transition ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition ${
                 activeTab === 'flowchart'
-                  ? 'bg-zinc-800 text-cyan-300 font-semibold border border-zinc-700'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-[#1B1B18] text-white'
+                  : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
               }`}
             >
-              1. User Flow Diagram
+              1. User flow diagram
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('er')}
-              className={`px-3 py-1.5 rounded text-xs font-mono transition ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition ${
                 activeTab === 'er'
-                  ? 'bg-zinc-800 text-cyan-300 font-semibold border border-zinc-700'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-[#1B1B18] text-white'
+                  : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
               }`}
             >
-              2. Data Model (ERD)
+              2. Data model (ERD)
             </button>
           </div>
 
           {/* Diagram display area */}
-          <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-4 sm:p-6 overflow-x-auto min-h-[360px] flex items-center justify-center">
+          <div className="rounded-[16px] border border-[#E4E2DA] bg-white p-5 sm:p-7 overflow-x-auto min-h-[360px] flex items-center justify-center shadow-xs">
             {isRendering ? (
-              <div className="text-xs font-mono text-zinc-500 animate-pulse">
+              <div className="text-xs text-[#6B6A63] animate-pulse">
                 Rendering diagram...
               </div>
             ) : activeState.parseError ? (
               /* Fallback if Mermaid parse fails: show code with note instead of crashing */
               <div className="w-full flex flex-col gap-3">
-                <div className="p-3 rounded border border-amber-900/60 bg-amber-950/30 text-xs font-mono text-amber-300 flex flex-col gap-1">
-                  <span className="font-bold">Notice: Mermaid syntax validation failed to render visually.</span>
-                  <span className="text-amber-400/80 text-[11px]">{activeState.parseError}</span>
-                  <span className="text-zinc-400 text-[11px] mt-1">Displaying raw diagram code below:</span>
+                <div className="p-3.5 rounded-[16px] border border-amber-200 bg-amber-50 text-xs text-amber-900 flex flex-col gap-1 font-sans">
+                  <span className="font-semibold">Notice: Mermaid syntax validation failed to render visually.</span>
+                  <span className="text-amber-800 text-[11px]">{activeState.parseError}</span>
+                  <span className="text-[#6B6A63] text-[11px] mt-1 font-mono">Displaying raw diagram code below:</span>
                 </div>
-                <pre className="p-4 rounded bg-zinc-900/90 border border-zinc-800 text-xs font-mono text-zinc-300 overflow-x-auto whitespace-pre">
+                <pre className="p-4 rounded-[16px] bg-[#F7F6F3] border border-[#E4E2DA] text-xs font-mono text-[#1B1B18] overflow-x-auto whitespace-pre">
                   {activeCode}
                 </pre>
               </div>
             ) : activeState.svg ? (
               <div
-                className="w-full flex items-center justify-center [&_svg]:max-w-full [&_svg]:h-auto"
+                className="w-full flex items-center justify-center [&_svg]:max-w-full [&_svg]:h-auto text-[#1B1B18]"
                 dangerouslySetInnerHTML={{ __html: activeState.svg }}
               />
             ) : (
-              <div className="text-xs font-mono text-zinc-500">
+              <div className="text-xs text-[#6B6A63]">
                 Diagram definition empty.
               </div>
             )}

@@ -98,17 +98,17 @@ function renderDecisionSourceBadge(text: string): React.ReactNode {
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       {isStated && (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold uppercase tracking-wider bg-emerald-950/80 text-emerald-300 border border-emerald-700/80">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-sans font-medium bg-slate-100 text-slate-800 border border-slate-200">
           Stated
         </span>
       )}
       {isAnswered && (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold uppercase tracking-wider bg-cyan-950/80 text-cyan-300 border border-cyan-700/80">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-sans font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
           Answered
         </span>
       )}
       {isAssumed && (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold uppercase tracking-wider bg-amber-950/80 text-amber-300 border border-amber-700/80">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-sans font-medium bg-amber-50 text-amber-800 border border-amber-200">
           Assumed
         </span>
       )}
@@ -123,7 +123,7 @@ function renderDecisionSourceBadge(text: string): React.ReactNode {
           .replace(/assume/gi, '')
           .replace(/^[-\s(),]+|[-\s(),]+$/g, '')
           .trim();
-        return clean ? <span className="text-[11px] text-zinc-400 font-sans">{clean}</span> : null;
+        return clean ? <span className="text-[11px] text-[#6B6A63] font-sans">{clean}</span> : null;
       })()}
     </div>
   );
@@ -136,7 +136,7 @@ function InteractiveTaskCheckbox({ defaultChecked }: { defaultChecked?: boolean 
       type="checkbox"
       checked={checked}
       onChange={() => setChecked((prev) => !prev)}
-      className="h-4 w-4 rounded border-zinc-700 bg-zinc-950 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-0 cursor-pointer transition shrink-0 mt-0.5 accent-cyan-500"
+      className="h-4 w-4 rounded border-[#E4E2DA] bg-white text-[#1B1B18] focus:ring-[#2563EB] focus:ring-offset-0 cursor-pointer transition shrink-0 mt-0.5 accent-[#1B1B18]"
     />
   );
 }
@@ -341,15 +341,15 @@ export function SpecViewer({
   const showConflictsPanel = showConflicts && hasConflicts;
 
   return (
-    <div className="flex flex-col gap-6 w-full text-zinc-100">
+    <div className="flex flex-col gap-6 w-full text-[#1B1B18]">
       {/* TOOLBAR AT TOP */}
-      <header className="rounded-lg border border-zinc-800 bg-zinc-900/70 p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3 shadow-sm backdrop-blur">
-        <div className="flex items-center gap-2">
-          <h2 className="text-sm sm:text-base font-semibold text-zinc-100 tracking-tight font-sans">
+      <header className="rounded-[16px] border border-[#E4E2DA] bg-white p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 shadow-warm-sm">
+        <div className="flex items-center gap-2.5">
+          <h2 className="text-base sm:text-lg font-serif font-normal text-[#1B1B18] tracking-tight">
             Engineering Specification
           </h2>
-          <span className="px-2 py-0.5 text-[11px] font-mono rounded bg-cyan-950/60 text-cyan-300 border border-cyan-800/60 font-semibold">
-            Markdown Ready
+          <span className="px-2.5 py-0.5 text-xs font-mono rounded-full bg-[#F3F2EE] text-[#6B6A63] border border-[#E4E2DA]">
+            Markdown ready
           </span>
         </div>
 
@@ -358,9 +358,9 @@ export function SpecViewer({
             <button
               type="button"
               onClick={onBackToFindings}
-              className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-zinc-100 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 rounded transition focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+              className="px-3.5 py-2 text-xs font-sans font-medium text-[#1B1B18] hover:bg-[#F7F6F3] bg-white border border-[#E4E2DA] rounded-lg transition"
             >
-              &larr; Back to Findings
+              &larr; Back to findings
             </button>
           )}
 
@@ -368,27 +368,27 @@ export function SpecViewer({
             <button
               type="button"
               onClick={onStartOver}
-              className="px-3 py-1.5 text-xs font-mono text-zinc-400 hover:text-zinc-200 bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-800 rounded transition focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+              className="px-3.5 py-2 text-xs font-sans font-medium text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F7F6F3] bg-white border border-[#E4E2DA] rounded-lg transition"
             >
-              Start Over
+              Start over
             </button>
           )}
 
           <button
             type="button"
             onClick={handleCopy}
-            className="px-3 py-1.5 text-xs font-mono font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border border-zinc-700 rounded transition inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+            className="px-3.5 py-2 text-xs font-sans font-medium bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-lg transition inline-flex items-center gap-1.5"
           >
             {copied ? (
               <>
-                <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-cyan-300">Copied!</span>
+                <span className="text-emerald-700">Copied!</span>
               </>
             ) : (
               <>
-                <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3.5 h-3.5 text-[#6B6A63]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
                 <span>Copy</span>
@@ -399,7 +399,7 @@ export function SpecViewer({
           <button
             type="button"
             onClick={handleDownload}
-            className="px-3.5 py-1.5 text-xs font-mono font-bold bg-cyan-500 hover:bg-cyan-400 text-zinc-950 rounded transition shadow-sm focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+            className="px-4 py-2 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg transition shadow-warm-xs"
           >
             Download .md
           </button>
@@ -407,18 +407,18 @@ export function SpecViewer({
           <button
             type="button"
             onClick={handleShareReport}
-            className="px-3 py-1.5 text-xs font-mono font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border border-zinc-700 rounded transition inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+            className="px-3.5 py-2 text-xs font-sans font-medium bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-lg transition inline-flex items-center gap-1.5"
           >
             {shareCopied ? (
               <>
-                <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-cyan-300">Link Copied!</span>
+                <span className="text-emerald-700">Link copied!</span>
               </>
             ) : (
               <>
-                <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3.5 h-3.5 text-[#6B6A63]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                 </svg>
                 <span>Share report</span>
@@ -430,9 +430,9 @@ export function SpecViewer({
 
       {/* READ-ONLY REPORT BANNER */}
       {isReadOnlyReport && (
-        <div className="rounded-lg border border-cyan-800 bg-cyan-950/70 p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-cyan-200">
+        <div className="rounded-[16px] border border-[#E4E2DA] bg-[#F7F6F3] p-4 flex flex-wrap items-center justify-between gap-3 text-xs font-sans text-[#1B1B18]">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded bg-cyan-500 text-zinc-950 font-bold uppercase tracking-wider text-[11px]">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#1B1B18] text-white font-medium text-[11px]">
               Shared report, read only
             </span>
             <span>This is a shared read-only snapshot. No model calls or edits can be made.</span>
@@ -441,7 +441,7 @@ export function SpecViewer({
             <button
               type="button"
               onClick={onExitReadOnly}
-              className="text-cyan-300 hover:text-white underline font-semibold focus-visible:outline-none"
+              className="text-[#1B1B18] underline font-medium hover:text-black"
             >
               Open in editable workspace &rarr;
             </button>
@@ -451,29 +451,29 @@ export function SpecViewer({
 
       {/* SHARE ERROR MESSAGE */}
       {shareError && (
-        <div className="p-3 rounded-lg border border-amber-800 bg-amber-950/70 text-amber-200 text-xs font-mono">
+        <div className="p-3.5 rounded-[16px] border border-amber-200 bg-amber-50 text-amber-900 text-xs font-sans">
           {shareError}
         </div>
       )}
 
-      {/* CONFLICTS PANEL (Card list with collapse/expand, Chips with Question Text, Highlighted Fix Box) */}
+      {/* CONFLICTS PANEL */}
       {showConflictsPanel && (
         <section
           role="region"
           aria-labelledby="conflicts-panel-title"
-          className="rounded-lg border border-amber-700/80 bg-amber-950/40 p-4 sm:p-5 flex flex-col gap-4 text-zinc-200 shadow-sm"
+          className="rounded-[16px] border border-amber-200/90 bg-amber-50/50 p-4 sm:p-5 flex flex-col gap-4 text-[#1B1B18] shadow-warm-xs"
         >
           {/* Header with Counter */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-900/50 pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-200/80 pb-3">
             <div className="flex items-center gap-2.5">
-              <span className="text-xs font-mono uppercase tracking-wider text-amber-300 font-bold border border-amber-600/80 bg-amber-900/60 px-2 py-0.5 rounded">
-                Answer Conflicts
+              <span className="text-xs font-sans font-medium text-amber-900 border border-amber-300 bg-amber-100/80 px-2.5 py-0.5 rounded-full">
+                Answer conflicts
               </span>
-              <span className="text-xs font-mono font-semibold text-amber-300">
+              <span className="text-xs font-sans font-medium text-amber-900">
                 {answerConflicts.length} {answerConflicts.length === 1 ? 'conflict' : 'conflicts'} detected
               </span>
             </div>
-            <p id="conflicts-panel-title" className="text-xs text-amber-200/90 font-sans">
+            <p id="conflicts-panel-title" className="text-xs text-[#6B6A63] font-sans">
               Some answers contradict each other or fail to resolve key constraints.
             </p>
           </div>
@@ -482,7 +482,6 @@ export function SpecViewer({
           <div className="flex flex-col gap-3">
             {answerConflicts.map((conflict, idx) => {
               const isExpanded = Boolean(expandedConflicts[idx]);
-              // Generate short clean title
               const shortTitle = `Conflict #${idx + 1}: ${
                 conflict.description.split('.')[0] || 'Unresolved tradeoff'
               }`;
@@ -490,58 +489,53 @@ export function SpecViewer({
               return (
                 <article
                   key={idx}
-                  className="rounded-lg border border-amber-900/60 bg-zinc-950/80 p-3.5 sm:p-4 flex flex-col gap-3 transition-colors hover:border-amber-700/60"
+                  className="rounded-[16px] border border-[#E4E2DA] bg-white p-4 flex flex-col gap-3 shadow-warm-xs"
                 >
-                  {/* Card Header (clickable to expand/collapse) */}
                   <button
                     type="button"
                     onClick={() => toggleConflict(idx)}
-                    className="w-full text-left flex items-start justify-between gap-3 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none rounded"
+                    className="w-full text-left flex items-start justify-between gap-3 rounded"
                     aria-expanded={isExpanded}
                   >
                     <div className="flex flex-col gap-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-zinc-100 font-sans truncate">
+                      <h3 className="text-sm font-medium text-[#1B1B18] font-sans truncate">
                         {shortTitle}
                       </h3>
                       {!isExpanded && (
-                        <p className="text-xs text-zinc-400 font-sans line-clamp-1">
+                        <p className="text-xs text-[#6B6A63] font-sans line-clamp-1">
                           {conflict.description}
                         </p>
                       )}
                     </div>
-                    <span className="text-xs font-mono text-amber-400 shrink-0 mt-0.5 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+                    <span className="text-xs font-sans text-[#6B6A63] shrink-0 mt-0.5 px-2.5 py-1 rounded-full bg-[#F7F6F3] border border-[#E4E2DA]">
                       {isExpanded ? 'Collapse ▲' : 'Details ▼'}
                     </span>
                   </button>
 
-                  {/* Expanded Card Body */}
                   {isExpanded && (
-                    <div className="flex flex-col gap-3 pt-2 border-t border-zinc-800/80 text-xs font-sans">
-                      {/* Clash Description in plain sans-serif */}
+                    <div className="flex flex-col gap-3 pt-3 border-t border-[#E4E2DA] text-xs font-sans">
                       <div>
-                        <span className="font-semibold text-zinc-300 block mb-1">
-                          The Clash:
+                        <span className="font-medium text-[#1B1B18] block mb-1">
+                          The clash:
                         </span>
-                        <p className="text-zinc-300 leading-relaxed font-sans">
+                        <p className="text-[#1B1B18]/90 leading-relaxed font-sans">
                           {conflict.description}
                         </p>
                       </div>
 
-                      {/* Distinct Highlighted Box for Suggested Fix */}
-                      <div className="p-3 rounded-lg border border-cyan-800/80 bg-cyan-950/40 text-cyan-200">
-                        <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-cyan-400 block mb-1">
-                          Suggested Resolution
+                      <div className="p-3.5 rounded-[12px] border border-[#E4E2DA] bg-[#F7F6F3] text-[#1B1B18]">
+                        <span className="font-mono text-[11px] font-medium uppercase tracking-wider text-[#6B6A63] block mb-1">
+                          Suggested resolution
                         </span>
-                        <p className="font-sans text-xs text-cyan-100 leading-relaxed">
+                        <p className="font-sans text-xs text-[#1B1B18] leading-relaxed">
                           {conflict.suggestedFix}
                         </p>
                       </div>
 
-                      {/* Chips showing related questions' text instead of IDs like Q1 */}
                       {conflict.questionIds && conflict.questionIds.length > 0 && (
                         <div className="flex flex-col gap-1.5 pt-1">
-                          <span className="font-mono text-[11px] text-zinc-500 uppercase tracking-wider">
-                            Related Questions:
+                          <span className="font-mono text-[11px] text-[#6B6A63] uppercase tracking-wider">
+                            Related questions:
                           </span>
                           <div className="flex flex-wrap gap-1.5">
                             {conflict.questionIds.map((qid) => {
@@ -549,10 +543,10 @@ export function SpecViewer({
                               return (
                                 <span
                                   key={qid}
-                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-sans bg-zinc-900 text-zinc-200 border border-zinc-700/80 shadow-xs max-w-full"
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-sans bg-[#F3F2EE] text-[#1B1B18] border border-[#E4E2DA] max-w-full"
                                   title={qText}
                                 >
-                                  <span className="font-mono text-[11px] text-amber-400 shrink-0">
+                                  <span className="font-mono text-[11px] text-[#6B6A63] shrink-0">
                                     #{qid}
                                   </span>
                                   <span className="truncate">{qText}</span>
@@ -569,15 +563,15 @@ export function SpecViewer({
             })}
           </div>
 
-          {/* Action Buttons: "Generate Anyway" is primary, "Edit My Answers" is secondary */}
-          <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-amber-900/40">
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-amber-200/60">
             {onBackToFindings && (
               <button
                 type="button"
                 onClick={onBackToFindings}
-                className="px-4 py-2 text-xs font-mono font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 rounded border border-zinc-700 transition focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+                className="px-4 py-2 text-xs font-sans font-medium bg-white hover:bg-[#F7F6F3] text-[#1B1B18] rounded-lg border border-[#E4E2DA] transition"
               >
-                &larr; Edit My Answers
+                &larr; Edit my answers
               </button>
             )}
 
@@ -587,24 +581,24 @@ export function SpecViewer({
                 setShowConflicts(false);
                 if (onGenerateAnyway) onGenerateAnyway();
               }}
-              className="px-4 py-2 text-xs font-mono font-bold bg-cyan-500 hover:bg-cyan-400 text-zinc-950 rounded transition shadow-sm focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+              className="px-4 py-2 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg transition shadow-warm-xs"
             >
-              Generate Anyway &rarr;
+              Generate anyway &rarr;
             </button>
           </div>
         </section>
       )}
 
       {/* PHASE 2 SPEC VIEW SWITCHER: Specification | Test Cases | Diagrams */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-3">
-        <div className="flex items-center gap-1.5 p-1 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E4E2DA] pb-3">
+        <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#F3F2EE] border border-[#E4E2DA] text-xs font-sans">
           <button
             type="button"
             onClick={() => setActiveMainTab('spec')}
-            className={`px-3 py-1.5 rounded transition ${
+            className={`px-3.5 py-1.5 rounded-full transition ${
               activeMainTab === 'spec'
-                ? 'bg-zinc-800 text-cyan-300 font-semibold'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-white text-[#1B1B18] font-medium shadow-xs'
+                : 'text-[#6B6A63] hover:text-[#1B1B18]'
             }`}
           >
             Specification
@@ -612,15 +606,15 @@ export function SpecViewer({
           <button
             type="button"
             onClick={() => setActiveMainTab('test-cases')}
-            className={`px-3 py-1.5 rounded transition flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 ${
               activeMainTab === 'test-cases'
-                ? 'bg-zinc-800 text-cyan-300 font-semibold'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-white text-[#1B1B18] font-medium shadow-xs'
+                : 'text-[#6B6A63] hover:text-[#1B1B18]'
             }`}
           >
-            <span>Test Cases</span>
+            <span>Test cases</span>
             {testCases && testCases.length > 0 && (
-              <span className="w-4 h-4 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/80 text-[10px] flex items-center justify-center font-bold">
+              <span className="w-4 h-4 rounded-full bg-[#1B1B18] text-white text-[10px] flex items-center justify-center font-mono">
                 {testCases.length}
               </span>
             )}
@@ -628,40 +622,40 @@ export function SpecViewer({
           <button
             type="button"
             onClick={() => setActiveMainTab('diagrams')}
-            className={`px-3 py-1.5 rounded transition flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 ${
               activeMainTab === 'diagrams'
-                ? 'bg-zinc-800 text-cyan-300 font-semibold'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-white text-[#1B1B18] font-medium shadow-xs'
+                : 'text-[#6B6A63] hover:text-[#1B1B18]'
             }`}
           >
             <span>Diagrams</span>
             {(diagrams?.flowchart || diagrams?.erDiagram) && (
-              <span className="w-2 h-2 rounded-full bg-cyan-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1B1B18]" />
             )}
           </button>
         </div>
 
-        {/* Feature 9: Changes vs previous toggle (shown when previousSpecMarkdown exists and differs) */}
+        {/* Feature 9: Changes vs previous toggle */}
         {previousSpecMarkdown && previousSpecMarkdown !== specMarkdown && activeMainTab === 'spec' && (
-          <div className="flex items-center rounded border border-zinc-800 bg-zinc-950 p-0.5 text-xs font-mono">
+          <div className="flex items-center rounded-full border border-[#E4E2DA] bg-[#F3F2EE] p-0.5 text-xs font-sans">
             <button
               type="button"
               onClick={() => setShowDiff(false)}
-              className={`px-2.5 py-1 rounded transition ${
+              className={`px-3 py-1 rounded-full transition ${
                 !showDiff
-                  ? 'bg-zinc-800 text-zinc-100 font-medium'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'bg-white text-[#1B1B18] font-medium shadow-xs'
+                  : 'text-[#6B6A63] hover:text-[#1B1B18]'
               }`}
             >
-              Current Spec
+              Current spec
             </button>
             <button
               type="button"
               onClick={() => setShowDiff(true)}
-              className={`px-2.5 py-1 rounded transition ${
+              className={`px-3 py-1 rounded-full transition ${
                 showDiff
-                  ? 'bg-zinc-800 text-cyan-300 font-medium'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'bg-white text-[#1B1B18] font-medium shadow-xs'
+                  : 'text-[#6B6A63] hover:text-[#1B1B18]'
               }`}
             >
               Changes vs previous
@@ -697,26 +691,26 @@ export function SpecViewer({
         <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
         {/* MOBILE TOC DISCLOSURE */}
         {tocItems.length > 0 && (
-          <div className="w-full lg:hidden border border-zinc-800 rounded-lg bg-zinc-900/60 p-3">
+          <div className="w-full lg:hidden border border-[#E4E2DA] rounded-[16px] bg-white p-3.5 shadow-warm-xs">
             <button
               type="button"
               onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
-              className="w-full flex items-center justify-between text-xs font-mono font-semibold text-zinc-300"
+              className="w-full flex items-center justify-between text-xs font-sans font-medium text-[#1B1B18]"
             >
-              <span>Table of Contents ({tocItems.length} sections)</span>
+              <span>Table of contents ({tocItems.length} sections)</span>
               <span>{isMobileTocOpen ? '▲' : '▼'}</span>
             </button>
             {isMobileTocOpen && (
-              <nav aria-label="Mobile table of contents" className="flex flex-col gap-1.5 pt-3 mt-2 border-t border-zinc-800">
+              <nav aria-label="Mobile table of contents" className="flex flex-col gap-1.5 pt-3 mt-2 border-t border-[#E4E2DA]">
                 {tocItems.map((item) => (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
                     onClick={() => setIsMobileTocOpen(false)}
-                    className={`text-xs block py-1 px-2 rounded transition-colors ${
+                    className={`text-xs block py-1.5 px-2.5 rounded-lg transition-colors ${
                       activeHeadingId === item.id
-                        ? 'bg-cyan-950/70 text-cyan-300 font-semibold'
-                        : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40'
+                        ? 'bg-[#F3F2EE] text-[#1B1B18] font-medium'
+                        : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F7F6F3]'
                     } ${item.level === 2 ? 'pl-4 text-[11px]' : ''}`}
                   >
                     {item.text}
@@ -729,9 +723,9 @@ export function SpecViewer({
 
         {/* DESKTOP STICKY TABLE OF CONTENTS */}
         {tocItems.length > 0 && (
-          <aside className="hidden lg:block w-64 shrink-0 sticky top-6 max-h-[calc(100vh-5rem)] overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-900/40 p-4 shadow-sm">
-            <h3 className="text-xs font-mono uppercase tracking-wider font-bold text-zinc-400 mb-3 border-b border-zinc-800/80 pb-2">
-              On This Page
+          <aside className="hidden lg:block w-64 shrink-0 sticky top-6 max-h-[calc(100vh-5rem)] overflow-y-auto rounded-[16px] border border-[#E4E2DA] bg-white p-4 shadow-warm-xs">
+            <h3 className="text-xs font-mono uppercase tracking-wider font-medium text-[#6B6A63] mb-3 border-b border-[#E4E2DA] pb-2">
+              On this page
             </h3>
             <nav aria-label="Desktop table of contents" className="flex flex-col gap-1">
               {tocItems.map((item) => {
@@ -740,10 +734,10 @@ export function SpecViewer({
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className={`text-xs block py-1.5 px-2 rounded transition-all leading-snug font-sans ${
+                    className={`text-xs block py-1.5 px-2.5 rounded-lg transition-all leading-snug font-sans ${
                       isActive
-                        ? 'bg-cyan-950/70 text-cyan-300 border-l-2 border-cyan-400 font-semibold pl-2.5'
-                        : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'
+                        ? 'bg-[#F7F6F3] text-[#1B1B18] border-l-2 border-[#1B1B18] font-medium pl-3'
+                        : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F7F6F3]/60'
                     } ${item.level === 2 ? 'pl-5 text-[11px]' : ''}`}
                   >
                     {item.text}
@@ -754,9 +748,9 @@ export function SpecViewer({
           </aside>
         )}
 
-        {/* MAIN MARKDOWN CONTENT COLUMN (~75ch wide, sans-serif prose, monospace only for code/IDs) */}
-        <main className="w-full max-w-[75ch] min-w-0 bg-zinc-900/30 border border-zinc-800/70 rounded-xl p-5 sm:p-8 sm:py-10 shadow-md">
-          <article className="prose prose-invert max-w-none text-zinc-200 font-sans">
+        {/* MAIN MARKDOWN CONTENT COLUMN (~75ch wide, Newsreader headlines, comfortable line length) */}
+        <main className="w-full max-w-[75ch] min-w-0 bg-white border border-[#E4E2DA] rounded-[16px] p-6 sm:p-10 shadow-warm-sm">
+          <article className="prose max-w-none text-[#1B1B18] font-sans">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
@@ -766,7 +760,7 @@ export function SpecViewer({
                   return (
                     <h1
                       id={id}
-                      className="text-2xl font-bold text-zinc-100 tracking-tight font-sans border-b border-zinc-800 pb-2.5 mt-8 mb-4 scroll-mt-20 first:mt-0"
+                      className="text-2xl sm:text-3xl font-serif font-normal text-[#1B1B18] tracking-tight border-b border-[#E4E2DA] pb-3 mt-8 mb-4 scroll-mt-20 first:mt-0"
                     >
                       {children}
                     </h1>
@@ -778,7 +772,7 @@ export function SpecViewer({
                   return (
                     <h2
                       id={id}
-                      className="text-lg font-semibold text-cyan-300 tracking-tight font-sans border-b border-zinc-800/60 pb-1.5 mt-7 mb-3 scroll-mt-20"
+                      className="text-xl sm:text-2xl font-serif font-normal text-[#1B1B18] tracking-tight border-b border-[#E4E2DA]/70 pb-2 mt-8 mb-3 scroll-mt-20"
                     >
                       {children}
                     </h2>
@@ -790,14 +784,14 @@ export function SpecViewer({
                   return (
                     <h3
                       id={id}
-                      className="text-sm font-semibold text-zinc-200 uppercase tracking-wider font-sans mt-5 mb-2 scroll-mt-20"
+                      className="text-xs font-mono font-medium text-[#6B6A63] uppercase tracking-wider mt-6 mb-2 scroll-mt-20"
                     >
                       {children}
                     </h3>
                   );
                 },
                 p: ({ children }) => (
-                  <p className="text-sm text-zinc-300 leading-relaxed mb-4 font-sans">
+                  <p className="text-sm text-[#1B1B18]/90 leading-relaxed mb-4 font-sans max-w-[75ch]">
                     {children}
                   </p>
                 ),
@@ -805,7 +799,7 @@ export function SpecViewer({
                   const isTaskList = className?.includes('contains-task-list');
                   return (
                     <ul
-                      className={`space-y-1.5 text-sm text-zinc-300 mb-4 font-sans ${
+                      className={`space-y-1.5 text-sm text-[#1B1B18]/90 mb-4 font-sans ${
                         isTaskList ? 'list-none pl-2' : 'list-disc list-outside pl-5'
                       }`}
                     >
@@ -814,7 +808,7 @@ export function SpecViewer({
                   );
                 },
                 ol: ({ children }) => (
-                  <ol className="list-decimal list-outside space-y-1.5 text-sm text-zinc-300 mb-4 pl-5 font-sans">
+                  <ol className="list-decimal list-outside space-y-1.5 text-sm text-[#1B1B18]/90 mb-4 pl-5 font-sans">
                     {children}
                   </ol>
                 ),
@@ -848,7 +842,7 @@ export function SpecViewer({
                     }
 
                     return (
-                      <li className="list-none -ml-4 flex items-start gap-2.5 py-1 text-sm text-zinc-300">
+                      <li className="list-none -ml-4 flex items-start gap-2.5 py-1 text-sm text-[#1B1B18]">
                         <span className="shrink-0 pt-0.5">
                           {checkboxNode || <InteractiveTaskCheckbox defaultChecked={false} />}
                         </span>
@@ -859,7 +853,7 @@ export function SpecViewer({
                     );
                   }
                   return (
-                    <li className="my-1 text-sm text-zinc-300 leading-normal">
+                    <li className="my-1 text-sm text-[#1B1B18]/90 leading-normal">
                       {children}
                     </li>
                   );
@@ -871,7 +865,7 @@ export function SpecViewer({
                   return null;
                 },
                 blockquote: ({ children }) => (
-                  <blockquote className="border-l-2 border-cyan-500/70 pl-3.5 my-4 text-zinc-400 italic text-sm bg-zinc-900/30 py-1.5 rounded-r">
+                  <blockquote className="border-l-2 border-[#1B1B18] pl-3.5 my-4 text-[#6B6A63] italic text-sm bg-[#F7F6F3] py-2 rounded-r">
                     {children}
                   </blockquote>
                 ),
@@ -879,45 +873,43 @@ export function SpecViewer({
                   const isBlock = className?.includes('language-');
                   if (isBlock) {
                     return (
-                      <code className="block p-3.5 bg-zinc-950 font-mono text-xs text-cyan-300 rounded-lg border border-zinc-800 overflow-x-auto my-3">
+                      <code className="block p-4 bg-[#F7F6F3] font-mono text-xs text-[#1B1B18] rounded-xl border border-[#E4E2DA] overflow-x-auto my-4">
                         {children}
                       </code>
                     );
                   }
                   return (
-                    <code className="bg-zinc-950 text-cyan-300 font-mono text-xs px-1.5 py-0.5 rounded border border-zinc-800">
+                    <code className="bg-[#F3F2EE] text-[#1B1B18] font-mono text-xs px-1.5 py-0.5 rounded border border-[#E4E2DA]">
                       {children}
                     </code>
                   );
                 },
-                // TABLES: borders, alternating row shading, sticky header, horizontal scroll on small screens
                 table: ({ children }) => (
-                  <div className="overflow-x-auto my-6 border border-zinc-800 rounded-lg max-h-[500px] overflow-y-auto shadow-xs">
+                  <div className="overflow-x-auto my-6 border border-[#E4E2DA] rounded-[16px] max-h-[500px] overflow-y-auto shadow-warm-xs">
                     <table className="w-full text-xs font-sans border-collapse">
                       {children}
                     </table>
                   </div>
                 ),
                 thead: ({ children }) => (
-                  <thead className="sticky top-0 bg-zinc-900 border-b border-zinc-800 z-10 shadow-xs">
+                  <thead className="sticky top-0 bg-[#F7F6F3] border-b border-[#E4E2DA] z-10">
                     {children}
                   </thead>
                 ),
                 tbody: ({ children }) => <tbody>{children}</tbody>,
                 tr: ({ children }) => (
-                  <tr className="border-b border-zinc-800/60 even:bg-zinc-900/40 odd:bg-transparent hover:bg-zinc-800/30 transition-colors">
+                  <tr className="border-b border-[#E4E2DA]/60 even:bg-[#F8F8F7]/60 odd:bg-white hover:bg-[#F7F6F3]/80 transition-colors">
                     {children}
                   </tr>
                 ),
                 th: ({ children }) => (
-                  <th className="border-b border-zinc-800 bg-zinc-900 p-2.5 sm:p-3 text-left font-semibold text-zinc-200 font-sans tracking-wide">
+                  <th className="border-b border-[#E4E2DA] bg-[#F7F6F3] p-3 text-left font-medium text-[#1B1B18] font-sans tracking-wide">
                     {children}
                   </th>
                 ),
                 td: ({ children }) => {
-                  // Turn "stated", "answered", and "assumed" labels into color-coded badges
                   return (
-                    <td className="p-2.5 sm:p-3 text-zinc-300 align-top font-sans">
+                    <td className="p-3 text-[#1B1B18] align-top font-sans">
                       {renderDecisionSourceCell(children)}
                     </td>
                   );
@@ -929,7 +921,7 @@ export function SpecViewer({
           </article>
 
           {/* AI Build Pack Section */}
-          <div className="mt-10 pt-8 border-t border-zinc-800">
+          <div className="mt-10 pt-8 border-t border-[#E4E2DA]">
             <BuildPack
               specMarkdown={specMarkdown}
               transcript={transcript}

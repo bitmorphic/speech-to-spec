@@ -84,6 +84,8 @@ export default function Home() {
 
   const [sampleLoading, setSampleLoading] = useState(false);
   const [findingsViewMode, setFindingsViewMode] = useState<'list' | 'map'>('list');
+  const [isReadinessOpen, setIsReadinessOpen] = useState(false);
+  const [isConflictMapOpen, setIsConflictMapOpen] = useState(false);
   const [isRecentDrawerOpen, setIsRecentDrawerOpen] = useState(false);
   const [storedSessions, setStoredSessions] = useState<StoredSession[]>([]);
   const [isReadOnlyReport, setIsReadOnlyReport] = useState(false);
@@ -678,61 +680,61 @@ export default function Home() {
     loadingContext === 'lint' ? LINT_LOADING_STATUSES : SPEC_LOADING_STATUSES;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F8F8F7] text-[#1B1B18] flex flex-col font-sans">
       {/* Shared Header Navigation */}
       <AppHeader
         onOpenRecent={() => setIsRecentDrawerOpen(true)}
         recentCount={storedSessions.length}
         stepperSlot={
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
-              <span className="text-zinc-500 uppercase tracking-wider font-semibold">Workflow:</span>
-              <span className="text-cyan-400 font-medium capitalize">{step}</span>
+            <div className="flex items-center gap-2 text-xs font-sans text-[#6B6A63]">
+              <span className="text-[#6B6A63] font-medium">Stage:</span>
+              <span className="text-[#1B1B18] font-semibold capitalize">{step}</span>
             </div>
             <nav aria-label="Progress" className="flex items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setStep('input')}
                 disabled={isLoading}
-                className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
+                className={`px-3 py-1 text-xs font-sans rounded-full transition-colors ${
                   step === 'input'
-                    ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/40 font-medium'
-                    : 'text-zinc-400 hover:text-zinc-200'
+                    ? 'bg-white text-[#1B1B18] border border-[#E4E2DA] font-medium shadow-xs'
+                    : 'text-[#6B6A63] hover:text-[#1B1B18]'
                 }`}
               >
                 1. Input
               </button>
 
-              <span className="text-zinc-700 text-xs font-mono">&rarr;</span>
+              <span className="text-[#E4E2DA] text-xs">&rarr;</span>
 
               <button
                 onClick={() => {
                   if (lintResult) setStep('findings');
                 }}
                 disabled={!lintResult || isLoading}
-                className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
+                className={`px-3 py-1 text-xs font-sans rounded-full transition-colors ${
                   step === 'findings'
-                    ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/40 font-medium'
+                    ? 'bg-white text-[#1B1B18] border border-[#E4E2DA] font-medium shadow-xs'
                     : lintResult
-                    ? 'text-zinc-300 hover:text-zinc-100'
-                    : 'text-zinc-600 cursor-not-allowed'
+                    ? 'text-[#1B1B18] hover:text-black'
+                    : 'text-[#6B6A63]/50 cursor-not-allowed'
                 }`}
               >
                 2. Findings
               </button>
 
-              <span className="text-zinc-700 text-xs font-mono">&rarr;</span>
+              <span className="text-[#E4E2DA] text-xs">&rarr;</span>
 
               <button
                 onClick={() => {
                   if (specResult) setStep('spec');
                 }}
                 disabled={!specResult || isLoading}
-                className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
+                className={`px-3 py-1 text-xs font-sans rounded-full transition-colors ${
                   step === 'spec'
-                    ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/40 font-medium'
+                    ? 'bg-white text-[#1B1B18] border border-[#E4E2DA] font-medium shadow-xs'
                     : specResult
-                    ? 'text-zinc-300 hover:text-zinc-100'
-                    : 'text-zinc-600 cursor-not-allowed'
+                    ? 'text-[#1B1B18] hover:text-black'
+                    : 'text-[#6B6A63]/50 cursor-not-allowed'
                 }`}
               >
                 3. Spec
@@ -743,28 +745,28 @@ export default function Home() {
       />
 
       {/* Main Container */}
-      <main className={`flex-1 w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-6 transition-all ${step === 'findings' || step === 'spec' ? 'max-w-7xl' : 'max-w-5xl'}`}>
+      <main className={`flex-1 w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-6 transition-all ${step === 'findings' || step === 'spec' ? 'max-w-7xl' : 'max-w-3xl'}`}>
         {/* Reusable Inline Error Banner */}
         {error && (
           <div
             role="alert"
-            className="rounded-lg border border-rose-900/60 bg-rose-950/40 p-4 text-zinc-200 flex flex-col gap-3 transition-all"
+            className="rounded-[16px] border border-rose-200 bg-rose-50/90 p-4 sm:p-5 text-rose-950 flex flex-col gap-3 shadow-warm-xs transition-all"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono uppercase tracking-wider text-rose-400 font-bold border border-rose-800/80 bg-rose-900/40 px-1.5 py-0.5 rounded">
-                    Error
+                  <span className="text-xs font-sans font-medium text-rose-900 border border-rose-300 bg-rose-100 px-2 py-0.5 rounded-full">
+                    Notice
                   </span>
-                  <span className="text-sm font-medium text-rose-200">
+                  <span className="text-sm font-medium text-rose-900">
                     {error.message}
                   </span>
                 </div>
 
                 {countdown !== null && countdown > 0 && (
-                  <p className="text-xs text-rose-300/80 font-mono mt-1">
+                  <p className="text-xs text-rose-800 font-mono mt-1">
                     {error.isAutoRetrying ? 'Auto-retrying in ' : 'Retry available in '}
-                    <span className="text-cyan-400 font-bold">{countdown}s</span>
+                    <span className="font-bold">{countdown}s</span>
                   </p>
                 )}
               </div>
@@ -778,9 +780,9 @@ export default function Home() {
                       else executeGenerateSpec();
                     }}
                     disabled={isLoading}
-                    className="px-3 py-1 text-xs font-mono bg-cyan-600 hover:bg-cyan-500 text-zinc-950 font-semibold rounded disabled:opacity-50 transition"
+                    className="px-3.5 py-1.5 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg transition"
                   >
-                    Retry Now
+                    Retry now
                   </button>
                 )}
 
@@ -792,9 +794,9 @@ export default function Home() {
                       else executeGenerateSpec();
                     }}
                     disabled={isLoading}
-                    className="px-3 py-1 text-xs font-mono bg-cyan-600 hover:bg-cyan-500 text-zinc-950 font-semibold rounded disabled:opacity-50 transition"
+                    className="px-3.5 py-1.5 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg transition"
                   >
-                    Retry Now
+                    Retry now
                   </button>
                 )}
 
@@ -806,9 +808,9 @@ export default function Home() {
                       else executeGenerateSpec();
                     }}
                     disabled={isLoading}
-                    className="px-3 py-1 text-xs font-mono bg-cyan-600 hover:bg-cyan-500 text-zinc-950 font-semibold rounded disabled:opacity-50 transition"
+                    className="px-3.5 py-1.5 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg transition"
                   >
-                    Try Again
+                    Try again
                   </button>
                 )}
 
@@ -820,7 +822,7 @@ export default function Home() {
                       else executeGenerateSpec();
                     }}
                     disabled={isLoading}
-                    className="px-3 py-1 text-xs font-mono bg-cyan-600 hover:bg-cyan-500 text-zinc-950 font-semibold rounded disabled:opacity-50 transition"
+                    className="px-3.5 py-1.5 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg transition"
                   >
                     Retry
                   </button>
@@ -829,7 +831,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => setError(null)}
-                  className="text-zinc-400 hover:text-zinc-200 text-xs font-mono px-1 py-1"
+                  className="text-[#6B6A63] hover:text-[#1B1B18] text-xs font-sans px-1.5 py-1"
                   aria-label="Dismiss error"
                 >
                   Dismiss
@@ -837,22 +839,22 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border-t border-rose-900/40 pt-2 text-xs">
+            <div className="border-t border-rose-200/80 pt-2 text-xs">
               <button
                 type="button"
                 onClick={() => setShowDebug((prev) => !prev)}
-                className="text-rose-400/80 hover:text-rose-300 font-mono text-[11px] underline underline-offset-2"
+                className="text-rose-800/80 hover:text-rose-950 font-sans text-xs underline underline-offset-2"
               >
                 {showDebug ? 'Hide debug info' : 'Show debug info'}
               </button>
               {showDebug && (
-                <div className="mt-2 p-2 rounded bg-zinc-950/80 border border-zinc-800 font-mono text-[11px] text-zinc-400 space-y-1">
+                <div className="mt-2 p-3 rounded-lg bg-white/80 border border-rose-200 font-mono text-[11px] text-rose-900 space-y-1">
                   <div>
-                    <span className="text-zinc-500">Error Code:</span> {error.code}
+                    <span className="text-[#6B6A63]">Error code:</span> {error.code}
                   </div>
                   {error.requestId && (
                     <div>
-                      <span className="text-zinc-500">Request ID:</span> {error.requestId}
+                      <span className="text-[#6B6A63]">Request ID:</span> {error.requestId}
                     </div>
                   )}
                 </div>
@@ -863,46 +865,69 @@ export default function Home() {
 
         {/* STEP 1: INPUT STAGE */}
         {step === 'input' && (
-          <section aria-labelledby="input-heading" className="flex flex-col gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h1 id="input-heading" className="text-lg font-semibold tracking-tight text-zinc-100">
-                  Spoken Requirements Transcript
-                </h1>
-                <p className="text-xs text-zinc-400">
-                  Paste raw speech or voice notes. Revisions with &quot;actually&quot; or &quot;scratch that&quot; automatically win.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 self-start sm:self-auto">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleSessionFileUpload}
-                  accept=".json,application/json"
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isLoading}
-                  className="px-3 py-1.5 text-xs font-mono bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-750 border-zinc-700/80 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:outline-none"
-                  title="Import a previously saved session JSON file"
-                >
-                  Import Session
-                </button>
-                <button
-                  type="button"
-                  onClick={handleLoadSample}
-                  disabled={isLoading || sampleLoading}
-                  className="px-3 py-1.5 text-xs font-mono bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100 border border-zinc-700/80 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:outline-none"
-                >
-                  {sampleLoading ? 'Loading Sample...' : 'Load Sample'}
-                </button>
-              </div>
+          <section aria-labelledby="input-heading" className="flex flex-col gap-6 w-full">
+            {/* Centered Editorial Newsletter Headlines */}
+            <div className="text-center max-w-2xl mx-auto pt-4 sm:pt-8 pb-2 flex flex-col items-center">
+              <h1 id="input-heading" className="font-serif text-3xl sm:text-5xl font-normal text-[#1B1B18] tracking-tight leading-tight">
+                Say it out loud. We will find what doesn&apos;t add up.
+              </h1>
+              <p className="mt-3 text-sm sm:text-base text-[#6B6A63] font-sans max-w-xl">
+                Voice Requirements Linter turns messy spoken thoughts into sharp engineering specs.
+              </p>
             </div>
 
-            <div className="flex flex-col gap-2">
+            {/* Small Callout directly above the input */}
+            <div className="rounded-[16px] border border-[#E4E2DA] bg-[#F7F6F3] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-warm-xs">
+              <div>
+                <span className="font-medium text-[#1B1B18] block mb-0.5">
+                  Speak your spec with Wispr Flow
+                </span>
+                <span className="text-[#6B6A63] font-sans">
+                  Click the box. Hold your Wispr Flow key and talk. Say it messy. Changes of mind are fine.
+                </span>
+              </div>
+              <a
+                href="https://flow.wispr.ai"
+                target="_blank"
+                rel="noopener nofollow"
+                className="inline-flex items-center gap-1 text-xs font-medium text-[#1B1B18] underline hover:text-black shrink-0 font-sans"
+              >
+                Get Wispr Flow &rarr;
+              </a>
+            </div>
+
+            {/* Large White Input Card */}
+            <div className="rounded-[16px] border border-[#E4E2DA] bg-white p-5 sm:p-6 shadow-warm-md flex flex-col gap-3 focus-within:ring-2 focus-within:ring-[#2563EB]/30 transition-all">
+              <div className="flex items-center justify-between text-xs text-[#6B6A63]">
+                <span className="font-sans">Wispr Flow will type here</span>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleSessionFileUpload}
+                    accept=".json,application/json"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isLoading}
+                    className="text-xs text-[#6B6A63] hover:text-[#1B1B18] underline font-sans"
+                    title="Import a previously saved session JSON file"
+                  >
+                    Import session
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleLoadSample}
+                    disabled={isLoading || sampleLoading}
+                    className="text-xs text-[#6B6A63] hover:text-[#1B1B18] underline font-sans"
+                  >
+                    {sampleLoading ? 'Loading sample...' : 'Load sample transcript'}
+                  </button>
+                </div>
+              </div>
+
               <label htmlFor="transcript" className="sr-only">
                 Voice transcript input
               </label>
@@ -912,71 +937,59 @@ export default function Home() {
                 onChange={(e) => handleTranscriptChange(e.target.value)}
                 disabled={isLoading}
                 rows={10}
-                placeholder="Example: I want to build an expense splitter for our hostel. Anyone can add an expense. Everything should be in browser only, no database. Actually no wait, scratch that, let's use SQLite locally. Each person sees only their own balance..."
-                className="w-full rounded-lg bg-zinc-900/90 border border-zinc-800 px-4 py-3 text-sm font-mono text-zinc-100 placeholder-zinc-600 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none disabled:opacity-60 transition"
+                placeholder="Hold your Wispr Flow key and speak or paste your transcript"
+                className="w-full bg-transparent border-0 p-0 text-sm font-sans text-[#1B1B18] placeholder-[#6B6A63]/60 focus:ring-0 focus:outline-none resize-y leading-relaxed"
               />
 
-              <div className="flex items-center justify-between text-xs font-mono">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[#E4E2DA]">
+                <div className="flex items-center gap-2 text-xs font-mono">
                   <span
                     className={
                       charCount === 0
-                        ? 'text-zinc-500'
+                        ? 'text-[#6B6A63]'
                         : charCount < 80
-                        ? 'text-amber-400'
+                        ? 'text-amber-700'
                         : charCount > 12000
-                        ? 'text-rose-400 font-bold'
-                        : 'text-cyan-400 font-medium'
+                        ? 'text-rose-700 font-bold'
+                        : 'text-[#1B1B18] font-medium'
                     }
                   >
                     {charCount.toLocaleString()} / 12,000 characters
                   </span>
                   {charCount > 0 && charCount < 80 && (
-                    <span className="text-zinc-500 text-[11px]">
+                    <span className="text-[#6B6A63] font-sans text-[11px]">
                       (min 80 required)
                     </span>
                   )}
                 </div>
 
-                <span className="text-zinc-600 text-[11px] hidden sm:inline">
-                  Range: 80 - 12,000 characters
-                </span>
-              </div>
+                <div className="flex items-center gap-3 self-end sm:self-auto">
+                  {lintResult && (
+                    <button
+                      type="button"
+                      onClick={() => setStep('findings')}
+                      disabled={isLoading}
+                      className="px-4 py-2 text-xs font-sans font-medium text-[#1B1B18] hover:bg-[#F7F6F3] bg-white border border-[#E4E2DA] rounded-lg transition"
+                    >
+                      View findings &rarr;
+                    </button>
+                  )}
 
-              {/* Feature 1: Instant Hints (rule-based detection with mirror text highlight) */}
-              <InstantHints transcript={transcript} />
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <div className="text-xs text-zinc-500 font-mono">
-                {isLoading && (
-                  <span className="text-cyan-400 animate-pulse font-medium">
-                    {activeLoadingStatuses[loadingStatusIndex]}...
-                  </span>
-                )}
-              </div>
-
-              <div className="flex items-center gap-3">
-                {lintResult && (
                   <button
                     type="button"
-                    onClick={() => setStep('findings')}
-                    disabled={isLoading}
-                    className="px-4 py-2 text-xs font-mono text-zinc-300 hover:text-zinc-100 border border-zinc-700 bg-zinc-900 rounded hover:bg-zinc-800 transition"
+                    onClick={() => executeLint(transcript)}
+                    disabled={!isInputValid || isLoading}
+                    className="px-6 py-2.5 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition shadow-warm-xs"
                   >
-                    View Current Findings &rarr;
+                    {isLoading ? 'Linting...' : 'Lint transcript'}
                   </button>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => executeLint(transcript)}
-                  disabled={!isInputValid || isLoading}
-                  className="px-5 py-2 text-xs font-mono font-bold uppercase tracking-wider bg-cyan-500 hover:bg-cyan-400 text-zinc-950 rounded disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-lg shadow-cyan-950/40 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
-                >
-                  {isLoading ? 'Linting...' : 'Lint Transcript'}
-                </button>
+                </div>
               </div>
+            </div>
+
+            {/* Instant Hints: Smaller and quieter below the card */}
+            <div className="px-1">
+              <InstantHints transcript={transcript} />
             </div>
           </section>
         )}
@@ -984,35 +997,30 @@ export default function Home() {
         {/* LOADING SKELETON STATE */}
         {isLoading && (
           <section aria-label="Loading analysis" className="flex flex-col gap-4 animate-pulse">
-            <div className="p-4 rounded-lg border border-cyan-900/40 bg-cyan-950/20 text-xs font-mono text-cyan-300">
-              {activeLoadingStatuses[loadingStatusIndex]}...
+            <div className="p-4 rounded-[16px] border border-[#E4E2DA] bg-white text-xs font-sans text-[#1B1B18] shadow-warm-xs">
+              <span className="font-medium text-[#1B1B18] animate-pulse">
+                {activeLoadingStatuses[loadingStatusIndex]}...
+              </span>
             </div>
-            <div className="h-28 bg-zinc-900/60 rounded-lg border border-zinc-800/60 w-full" />
-            <div className="h-36 bg-zinc-900/60 rounded-lg border border-zinc-800/60 w-full" />
-            <div className="h-36 bg-zinc-900/60 rounded-lg border border-zinc-800/60 w-full" />
+            <div className="h-28 bg-white/70 rounded-[16px] border border-[#E4E2DA] w-full" />
+            <div className="h-36 bg-white/70 rounded-[16px] border border-[#E4E2DA] w-full" />
+            <div className="h-36 bg-white/70 rounded-[16px] border border-[#E4E2DA] w-full" />
           </section>
         )}
 
         {/* STEP 2: FINDINGS STAGE */}
         {!isLoading && step === 'findings' && lintResult && (
           <section aria-labelledby="findings-heading" className="flex flex-col gap-6">
-            {/* Feature 4: Readiness Meter */}
-            <ReadinessMeter
-              contradictions={lintResult.contradictions}
-              missingDecisions={lintResult.missingDecisions}
-              questions={lintResult.questions}
-              answers={answers}
-            />
-
-            <div className="rounded-lg border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5 flex flex-col gap-3">
+            {/* Analysis Summary Header */}
+            <div className="rounded-[16px] border border-[#E4E2DA] bg-white p-5 sm:p-6 flex flex-col gap-3 shadow-warm-sm">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <h2 id="findings-heading" className="text-base font-semibold text-zinc-100 tracking-tight">
-                    Analysis Summary
+                <div className="flex items-center gap-2.5">
+                  <h2 id="findings-heading" className="text-base sm:text-lg font-serif font-normal text-[#1B1B18] tracking-tight">
+                    Analysis summary
                   </h2>
                   {lintResult.cached && (
-                    <span className="px-2 py-0.5 text-[11px] font-mono rounded-full border border-cyan-500/40 bg-cyan-950/60 text-cyan-300 font-medium">
-                      Sample results cached
+                    <span className="px-2.5 py-0.5 text-xs font-sans rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 font-medium">
+                      Sample cached
                     </span>
                   )}
                 </div>
@@ -1020,276 +1028,310 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => setStep('input')}
-                  className="text-xs font-mono text-zinc-400 hover:text-cyan-400 transition"
+                  className="text-xs font-sans font-medium text-[#6B6A63] hover:text-[#1B1B18] transition"
                 >
-                  &larr; Edit Transcript
+                  &larr; Edit transcript
                 </button>
               </div>
 
-              <p className="text-sm text-zinc-300 leading-relaxed">
+              <p className="text-sm text-[#1B1B18]/90 leading-relaxed font-sans">
                 {lintResult.summary}
               </p>
 
-              <div className="flex flex-wrap gap-2 pt-1 border-t border-zinc-800/80 text-xs font-mono">
-                <span className="px-2 py-1 rounded bg-zinc-800/70 text-zinc-300 border border-zinc-700/60">
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-[#E4E2DA] text-xs font-sans">
+                <span className="px-3 py-1 rounded-full bg-[#F3F2EE] text-[#1B1B18] border border-[#E4E2DA]">
                   {lintResult.selfCorrections?.length || 0} self-corrections
                 </span>
-                <span className="px-2 py-1 rounded bg-zinc-800/70 text-zinc-300 border border-zinc-700/60">
+                <span className="px-3 py-1 rounded-full bg-[#F3F2EE] text-[#1B1B18] border border-[#E4E2DA]">
                   {lintResult.contradictions?.length || 0} contradictions
                 </span>
-                <span className="px-2 py-1 rounded bg-zinc-800/70 text-zinc-300 border border-zinc-700/60">
+                <span className="px-3 py-1 rounded-full bg-[#F3F2EE] text-[#1B1B18] border border-[#E4E2DA]">
                   {lintResult.missingDecisions?.length || 0} missing decisions
                 </span>
-                <span className="px-2 py-1 rounded bg-zinc-800/70 text-zinc-300 border border-zinc-700/60">
+                <span className="px-3 py-1 rounded-full bg-[#F3F2EE] text-[#1B1B18] border border-[#E4E2DA]">
                   {lintResult.questions?.length || 0} clarifying questions
                 </span>
               </div>
             </div>
 
-            {/* Split layout: Findings Left, Feature 2 Transcript Highlighter Right */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              {/* Left Column (7 cols): Findings List / Graph */}
-              <div className="lg:col-span-7 flex flex-col gap-6">
-
-            {/* Self-Corrections Resolved */}
+            {/* Secondary Panels Behind Clear Toggles (Collapsed by default) */}
             <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-400">
-                  Self-Corrections Resolved
-                </h3>
-                <span className="text-xs font-mono text-zinc-500">
-                  ({lintResult.selfCorrections?.length || 0})
-                </span>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsReadinessOpen((prev) => !prev)}
+                  className={`px-3.5 py-1.5 text-xs font-sans font-medium rounded-full border transition inline-flex items-center gap-1.5 shadow-warm-xs ${
+                    isReadinessOpen
+                      ? 'bg-[#1B1B18] text-white border-[#1B1B18]'
+                      : 'bg-white text-[#1B1B18] border-[#E4E2DA] hover:bg-[#F7F6F3]'
+                  }`}
+                >
+                  <span>Readiness meter</span>
+                  <span className="text-[10px]">{isReadinessOpen ? '▲' : '▼'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsConflictMapOpen((prev) => !prev)}
+                  className={`px-3.5 py-1.5 text-xs font-sans font-medium rounded-full border transition inline-flex items-center gap-1.5 shadow-warm-xs ${
+                    isConflictMapOpen
+                      ? 'bg-[#1B1B18] text-white border-[#1B1B18]'
+                      : 'bg-white text-[#1B1B18] border-[#E4E2DA] hover:bg-[#F7F6F3]'
+                  }`}
+                >
+                  <span>Conflict map</span>
+                  <span className="text-[10px]">{isConflictMapOpen ? '▲' : '▼'}</span>
+                </button>
               </div>
 
-              {(!lintResult.selfCorrections || lintResult.selfCorrections.length === 0) ? (
-                <div className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 text-xs text-zinc-500 font-mono">
-                  No self-corrections detected in transcript.
+              {isReadinessOpen && (
+                <div className="rounded-[16px] border border-[#E4E2DA] bg-white p-5 shadow-warm-sm">
+                  <ReadinessMeter
+                    contradictions={lintResult.contradictions}
+                    missingDecisions={lintResult.missingDecisions}
+                    questions={lintResult.questions}
+                    answers={answers}
+                  />
                 </div>
-              ) : (
-                <div className="grid gap-3">
-                  {lintResult.selfCorrections.map((sc) => (
-                    <article
-                      key={sc.id}
-                      id={`finding-${sc.id}`}
-                      className={`p-4 rounded-lg border transition-all ${
-                        highlightedFindingId === sc.id
-                          ? 'border-cyan-400 bg-cyan-950/40 ring-2 ring-cyan-400/50'
-                          : 'border-zinc-800 bg-zinc-900/50 hover:border-zinc-700'
-                      }`}
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
-                        <span className="font-mono text-xs text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">
-                          {sc.id}
-                        </span>
-                        <span className="text-[11px] font-mono uppercase tracking-wider font-semibold px-2 py-0.5 rounded border border-cyan-500/40 bg-cyan-950/60 text-cyan-300">
-                          Last statement wins
-                        </span>
-                      </div>
+              )}
 
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2 font-mono text-xs sm:text-sm">
-                        <span className="line-through text-zinc-500 bg-zinc-950/80 px-2 py-1 rounded border border-zinc-800/80 break-words">
-                          &quot;{sc.earlierQuote}&quot;
-                        </span>
-                        <span className="text-zinc-600 hidden sm:inline">&rarr;</span>
-                        <span className="text-cyan-300 font-semibold bg-cyan-950/70 border border-cyan-800/80 px-2 py-1 rounded break-words">
-                          &quot;{sc.finalQuote}&quot;
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-zinc-300 leading-normal">
-                        <span className="text-zinc-500 font-mono">Resolution:</span> {sc.resolution}
-                      </p>
-                    </article>
-                  ))}
+              {isConflictMapOpen && (
+                <div className="rounded-[16px] border border-[#E4E2DA] bg-white p-5 shadow-warm-sm">
+                  <ConflictMap
+                    contradictions={lintResult.contradictions}
+                    questions={lintResult.questions}
+                    onSelectContradiction={(id) => handleScrollToFinding(id)}
+                  />
                 </div>
               )}
             </div>
 
-            {/* Contradictions & Feature 3: Conflict Map */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-400">
-                    Contradictions
+            {/* Main Column: Highlighted Transcript, Findings as notes beside it */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* MAIN COLUMN (7 cols): Highlighted Transcript */}
+              <div className="lg:col-span-7 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-sans font-semibold text-[#1B1B18]">
+                    Transcript with findings
                   </h3>
-                  <span className="text-xs font-mono text-zinc-500">
-                    ({lintResult.contradictions?.length || 0})
+                  <span className="text-xs text-[#6B6A63] font-sans">
+                    Click any highlighted phrase to jump to its note
                   </span>
                 </div>
 
-                {lintResult.contradictions && lintResult.contradictions.length > 0 && (
-                  <div className="flex items-center rounded border border-zinc-800 bg-zinc-950 p-0.5 text-xs font-mono">
-                    <button
-                      type="button"
-                      onClick={() => setFindingsViewMode('list')}
-                      className={`px-2.5 py-1 rounded transition ${
-                        findingsViewMode === 'list'
-                          ? 'bg-zinc-800 text-zinc-100 font-medium'
-                          : 'text-zinc-500 hover:text-zinc-300'
-                      }`}
-                    >
-                      List View
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFindingsViewMode('map')}
-                      className={`px-2.5 py-1 rounded transition ${
-                        findingsViewMode === 'map'
-                          ? 'bg-zinc-800 text-cyan-300 font-medium'
-                          : 'text-zinc-500 hover:text-zinc-300'
-                      }`}
-                    >
-                      Conflict Map
-                    </button>
-                  </div>
-                )}
+                <TranscriptHighlighter
+                  transcript={transcript}
+                  lintResult={lintResult}
+                  activeFindingId={highlightedFindingId}
+                  onSelectFinding={(id) => handleScrollToFinding(id)}
+                />
               </div>
 
-              {(!lintResult.contradictions || lintResult.contradictions.length === 0) ? (
-                <div className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 text-xs text-zinc-500 font-mono">
-                  No contradictions identified.
-                </div>
-              ) : findingsViewMode === 'map' ? (
-                <ConflictMap
-                  contradictions={lintResult.contradictions}
-                  questions={lintResult.questions}
-                  onSelectContradiction={(id) => handleScrollToFinding(id)}
-                />
-              ) : (
-                <div className="grid gap-3">
-                  {lintResult.contradictions.map((c) => (
-                    <article
-                      key={c.id}
-                      id={`finding-${c.id}`}
-                      className={`p-4 rounded-lg border transition-all ${
-                        highlightedFindingId === c.id
-                          ? 'border-cyan-400 bg-cyan-950/40 ring-2 ring-cyan-400/50'
-                          : 'border-zinc-800 bg-zinc-900/50 hover:border-zinc-700'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="font-mono text-xs text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">
-                          {c.id}
-                        </span>
-                        <span
-                          className={`text-[11px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${
-                            c.severity === 'high'
-                              ? 'border-rose-800/80 bg-rose-950/60 text-rose-300'
-                              : 'border-amber-800/80 bg-amber-950/60 text-amber-300'
+              {/* NOTES BESIDE IT (5 cols): Findings Cards */}
+              <div className="lg:col-span-5 flex flex-col gap-6 lg:sticky lg:top-20">
+                {/* Self-Corrections Resolved */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-xs font-mono uppercase tracking-wider font-medium text-[#6B6A63]">
+                      Self-corrections resolved
+                    </h3>
+                    <span className="text-xs font-mono text-[#6B6A63]">
+                      ({lintResult.selfCorrections?.length || 0})
+                    </span>
+                  </div>
+
+                  {(!lintResult.selfCorrections || lintResult.selfCorrections.length === 0) ? (
+                    <div className="p-3.5 rounded-[16px] border border-[#E4E2DA] bg-white text-xs text-[#6B6A63] font-sans shadow-warm-xs">
+                      No self-corrections detected in transcript.
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {lintResult.selfCorrections.map((sc) => (
+                        <article
+                          key={sc.id}
+                          id={`finding-${sc.id}`}
+                          className={`p-4 rounded-[16px] border transition-all ${
+                            highlightedFindingId === sc.id
+                              ? 'border-[#2563EB] bg-blue-50/40 ring-2 ring-[#2563EB]/40'
+                              : 'border-[#E4E2DA] bg-white shadow-warm-xs hover:border-[#1B1B18]/30'
                           }`}
                         >
-                          {c.severity} severity
-                        </span>
-                      </div>
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span className="font-mono text-xs text-[#6B6A63] bg-[#F3F2EE] px-2 py-0.5 rounded">
+                              {sc.id}
+                            </span>
+                            <span className="text-[11px] font-sans font-medium px-2 py-0.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800">
+                              Last statement wins
+                            </span>
+                          </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3 font-mono text-xs">
-                        <div className="p-2.5 rounded bg-zinc-950/80 border border-zinc-800/90 flex flex-col gap-1">
-                          <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">
-                            Quote A
-                          </span>
-                          <span className="text-zinc-200 break-words">
-                            &quot;{c.quoteA}&quot;
-                          </span>
-                        </div>
-                        <div className="p-2.5 rounded bg-zinc-950/80 border border-zinc-800/90 flex flex-col gap-1">
-                          <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">
-                            Quote B
-                          </span>
-                          <span className="text-zinc-200 break-words">
-                            &quot;{c.quoteB}&quot;
-                          </span>
-                        </div>
-                      </div>
+                          <div className="flex flex-col gap-1.5 mb-2 font-mono text-xs">
+                            <span className="line-through text-[#6B6A63] bg-[#F7F6F3] px-2 py-1 rounded border border-[#E4E2DA] break-words">
+                              &quot;{sc.earlierQuote}&quot;
+                            </span>
+                            <span className="text-emerald-800 font-semibold bg-emerald-50 border border-emerald-200 px-2 py-1 rounded break-words">
+                              &quot;{sc.finalQuote}&quot;
+                            </span>
+                          </div>
 
-                      <p className="text-xs text-zinc-300 leading-normal">
-                        <span className="text-zinc-500 font-mono">Conflict Why:</span> {c.why}
-                      </p>
-                    </article>
-                  ))}
+                          <p className="text-xs text-[#1B1B18]/90 leading-relaxed font-sans">
+                            <span className="text-[#6B6A63] font-medium">Resolution:</span> {sc.resolution}
+                          </p>
+                        </article>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* Missing Decisions */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-400">
-                  Missing Decisions
-                </h3>
-                <span className="text-xs font-mono text-zinc-500">
-                  ({lintResult.missingDecisions?.length || 0})
-                </span>
+                {/* Contradictions */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-xs font-mono uppercase tracking-wider font-medium text-[#6B6A63]">
+                      Contradictions
+                    </h3>
+                    <span className="text-xs font-mono text-[#6B6A63]">
+                      ({lintResult.contradictions?.length || 0})
+                    </span>
+                  </div>
+
+                  {(!lintResult.contradictions || lintResult.contradictions.length === 0) ? (
+                    <div className="p-3.5 rounded-[16px] border border-[#E4E2DA] bg-white text-xs text-[#6B6A63] font-sans shadow-warm-xs">
+                      No contradictions identified.
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {lintResult.contradictions.map((c) => (
+                        <article
+                          key={c.id}
+                          id={`finding-${c.id}`}
+                          className={`p-4 rounded-[16px] border transition-all ${
+                            highlightedFindingId === c.id
+                              ? 'border-[#2563EB] bg-blue-50/40 ring-2 ring-[#2563EB]/40'
+                              : 'border-[#E4E2DA] bg-white shadow-warm-xs hover:border-[#1B1B18]/30'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-2.5">
+                            <span className="font-mono text-xs text-[#6B6A63] bg-[#F3F2EE] px-2 py-0.5 rounded">
+                              {c.id}
+                            </span>
+                            <span
+                              className={`text-[11px] font-sans font-medium px-2.5 py-0.5 rounded-full border ${
+                                c.severity === 'high'
+                                  ? 'border-rose-200 bg-rose-50 text-rose-800'
+                                  : 'border-amber-200 bg-amber-50 text-amber-800'
+                              }`}
+                            >
+                              {c.severity} severity
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-2 mb-2.5 font-mono text-xs">
+                            <div className="p-2 rounded bg-amber-50/60 border border-amber-200/70 flex flex-col gap-0.5">
+                              <span className="text-[10px] text-amber-800 uppercase font-sans font-medium">
+                                Quote A
+                              </span>
+                              <span className="text-amber-950 break-words">
+                                &quot;{c.quoteA}&quot;
+                              </span>
+                            </div>
+                            <div className="p-2 rounded bg-rose-50/60 border border-rose-200/70 flex flex-col gap-0.5">
+                              <span className="text-[10px] text-rose-800 uppercase font-sans font-medium">
+                                Quote B
+                              </span>
+                              <span className="text-rose-950 break-words">
+                                &quot;{c.quoteB}&quot;
+                              </span>
+                            </div>
+                          </div>
+
+                          <p className="text-xs text-[#1B1B18]/90 leading-relaxed font-sans">
+                            <span className="text-[#6B6A63] font-medium">Why it clashes:</span> {c.why}
+                          </p>
+                        </article>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Missing Decisions */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-xs font-mono uppercase tracking-wider font-medium text-[#6B6A63]">
+                      Missing decisions
+                    </h3>
+                    <span className="text-xs font-mono text-[#6B6A63]">
+                      ({lintResult.missingDecisions?.length || 0})
+                    </span>
+                  </div>
+
+                  {(!lintResult.missingDecisions || lintResult.missingDecisions.length === 0) ? (
+                    <div className="p-3.5 rounded-[16px] border border-[#E4E2DA] bg-white text-xs text-[#6B6A63] font-sans shadow-warm-xs">
+                      No missing decisions reported.
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {lintResult.missingDecisions.map((md) => (
+                        <article
+                          key={md.id}
+                          id={`finding-${md.id}`}
+                          className={`p-4 rounded-[16px] border transition-all ${
+                            highlightedFindingId === md.id
+                              ? 'border-[#2563EB] bg-blue-50/40 ring-2 ring-[#2563EB]/40'
+                              : 'border-[#E4E2DA] bg-white shadow-warm-xs hover:border-[#1B1B18]/30'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <span className="font-mono text-xs text-[#6B6A63] bg-[#F3F2EE] px-2 py-0.5 rounded">
+                              {md.id}
+                            </span>
+                            <span className="text-xs font-medium text-[#1B1B18] font-sans">
+                              {md.topic}
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-[#1B1B18]/90 leading-relaxed font-sans">
+                            <span className="text-[#6B6A63] font-medium">Why it matters:</span> {md.whyItMatters}
+                          </p>
+                        </article>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-
-              {(!lintResult.missingDecisions || lintResult.missingDecisions.length === 0) ? (
-                <div className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 text-xs text-zinc-500 font-mono">
-                  No missing architectural decisions reported.
-                </div>
-              ) : (
-                <div className="grid gap-3">
-                  {lintResult.missingDecisions.map((md) => (
-                    <article
-                      key={md.id}
-                      id={`finding-${md.id}`}
-                      className={`p-4 rounded-lg border transition-all ${
-                        highlightedFindingId === md.id
-                          ? 'border-cyan-400 bg-cyan-950/40 ring-2 ring-cyan-400/50'
-                          : 'border-zinc-800 bg-zinc-900/50 hover:border-zinc-700'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="font-mono text-xs text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">
-                          {md.id}
-                        </span>
-                        <span className="text-xs font-bold text-zinc-200 font-mono">
-                          {md.topic}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-zinc-300 leading-normal">
-                        <span className="text-zinc-500 font-mono">Why It Matters:</span>{' '}
-                        {md.whyItMatters}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              )}
             </div>
 
-            {/* Clarifying Questions */}
-            <div className="flex flex-col gap-4 border-t border-zinc-800 pt-6">
-              <div className="flex flex-col gap-2.5">
+            {/* Clarifying Questions & Spec Generation */}
+            <div className="flex flex-col gap-4 border-t border-[#E4E2DA] pt-8 mt-4">
+              <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-300">
-                      Clarifying Questions
+                    <h3 className="text-base sm:text-lg font-serif font-normal text-[#1B1B18] tracking-tight">
+                      Clarifying questions
                     </h3>
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-xs text-[#6B6A63] font-sans">
                       Resolve ambiguity by picking an option or typing your answer before generating the spec.
                     </p>
                   </div>
-                  <span className="text-xs font-mono text-zinc-400">
+                  <span className="text-xs font-mono text-[#6B6A63]">
                     {totalQuestions} questions
                   </span>
                 </div>
 
                 {/* Questions Progress Bar */}
                 {totalQuestions > 0 && (
-                  <div className="flex flex-col gap-1.5 p-3 rounded-lg border border-zinc-800/80 bg-zinc-900/40">
-                    <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-zinc-400">
-                        Progress:{' '}
-                        <strong className="text-cyan-300 font-semibold">{answeredQuestionsCount}</strong> of{' '}
+                  <div className="flex flex-col gap-1.5 p-3.5 rounded-[16px] border border-[#E4E2DA] bg-white shadow-warm-xs">
+                    <div className="flex items-center justify-between text-xs font-sans">
+                      <span className="text-[#6B6A63]">
+                        Progress: <strong className="text-[#1B1B18] font-semibold">{answeredQuestionsCount}</strong> of{' '}
                         {totalQuestions} answered
                       </span>
-                      <span className={allQuestionsSatisfied ? 'text-cyan-400 font-bold' : 'text-zinc-500'}>
+                      <span className={allQuestionsSatisfied ? 'text-emerald-700 font-medium' : 'text-[#6B6A63]'}>
                         {Math.round(questionsProgressPercent)}%
                       </span>
                     </div>
-                    <div className="w-full bg-zinc-800 rounded-full h-2 overflow-hidden">
+                    <div className="w-full bg-[#F3F2EE] rounded-full h-2 overflow-hidden">
                       <div
-                        className="bg-cyan-500 h-full rounded-full transition-all duration-300 ease-out"
+                        className="bg-[#1B1B18] h-full rounded-full transition-all duration-300 ease-out"
                         style={{ width: `${questionsProgressPercent}%` }}
                       />
                     </div>
@@ -1298,7 +1340,7 @@ export default function Home() {
               </div>
 
               {(!lintResult.questions || lintResult.questions.length === 0) ? (
-                <div className="p-4 rounded-lg border border-cyan-900/40 bg-cyan-950/20 text-xs text-cyan-300 font-mono">
+                <div className="p-4 rounded-[16px] border border-[#E4E2DA] bg-white text-xs text-[#6B6A63] font-sans shadow-warm-xs">
                   No clarifying questions were needed for this transcript.
                 </div>
               ) : (
@@ -1310,28 +1352,28 @@ export default function Home() {
                     return (
                       <div
                         key={q.id}
-                        className={`p-4 rounded-lg border flex flex-col gap-3 transition-colors ${
+                        className={`p-5 rounded-[16px] border flex flex-col gap-3 transition-colors ${
                           isSatisfied
-                            ? 'border-zinc-800 bg-zinc-900/60'
-                            : 'border-zinc-700/80 bg-zinc-900/90'
+                            ? 'border-[#E4E2DA] bg-white shadow-warm-xs'
+                            : 'border-[#E4E2DA] bg-white shadow-warm-sm'
                         }`}
                       >
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-                          <div className="flex flex-col gap-1.5">
-                            <span className="font-mono text-xs text-zinc-500">{q.id}</span>
-                            <p className="text-sm font-medium text-zinc-100">
+                          <div className="flex flex-col gap-1">
+                            <span className="font-mono text-xs text-[#6B6A63]">{q.id}</span>
+                            <p className="text-sm font-medium text-[#1B1B18] font-sans">
                               {q.question}
                             </p>
                           </div>
 
                           <div className="flex items-center gap-1.5 flex-wrap shrink-0">
-                            <span className="text-[11px] font-mono text-zinc-500">Relates to:</span>
+                            <span className="text-[11px] font-sans text-[#6B6A63]">Relates to:</span>
                             {q.relatesTo && q.relatesTo.map((findingId) => (
                               <button
                                 key={findingId}
                                 type="button"
                                 onClick={() => handleScrollToFinding(findingId)}
-                                className="px-1.5 py-0.5 text-[11px] font-mono bg-zinc-800 hover:bg-cyan-950 hover:text-cyan-300 hover:border-cyan-500/60 text-zinc-300 border border-zinc-700 rounded transition"
+                                className="px-2 py-0.5 text-[11px] font-mono bg-[#F7F6F3] hover:bg-[#F3F2EE] text-[#1B1B18] border border-[#E4E2DA] rounded transition"
                                 title={`Click to jump to finding ${findingId}`}
                               >
                                 #{findingId}
@@ -1342,17 +1384,17 @@ export default function Home() {
 
                         {q.options && q.options.length > 0 && (
                           <div className="flex flex-wrap items-center gap-2 pt-1">
-                            <span className="text-xs font-mono text-zinc-500">Quick-pick:</span>
+                            <span className="text-xs font-sans text-[#6B6A63]">Quick-pick:</span>
                             {q.options.map((opt, idx) => (
                               <button
                                 key={idx}
                                 type="button"
                                 onClick={() => handleQuickPick(q.id, opt)}
                                 disabled={ans.youDecide}
-                                className={`px-2.5 py-1 text-xs rounded border transition-colors ${
+                                className={`px-3 py-1 text-xs rounded-full border transition font-sans ${
                                   ans.text === opt && !ans.youDecide
-                                    ? 'bg-cyan-950 text-cyan-300 border-cyan-500/80 font-medium'
-                                    : 'bg-zinc-800/80 hover:bg-zinc-800 text-zinc-300 border-zinc-700/80 disabled:opacity-40'
+                                    ? 'bg-[#1B1B18] text-white border-[#1B1B18] font-medium shadow-xs'
+                                    : 'bg-[#F7F6F3] hover:bg-[#F3F2EE] text-[#1B1B18] border-[#E4E2DA] disabled:opacity-40'
                                 }`}
                               >
                                 {opt}
@@ -1372,19 +1414,19 @@ export default function Home() {
                             onChange={(e) => handleAnswerText(q.id, e.target.value)}
                             disabled={ans.youDecide}
                             placeholder={ans.youDecide ? 'Delegated to AI ("You Decide")' : 'Type custom decision or choose option...'}
-                            className="flex-1 rounded bg-zinc-950 border border-zinc-800 px-3 py-1.5 text-xs font-mono text-zinc-200 placeholder-zinc-600 focus:border-cyan-500 focus:outline-none disabled:opacity-40 transition"
+                            className="flex-1 rounded-lg bg-[#F7F6F3] border border-[#E4E2DA] px-3.5 py-2 text-xs font-sans text-[#1B1B18] placeholder-[#6B6A63]/70 focus:border-[#1B1B18] focus:outline-none disabled:opacity-40 transition"
                           />
 
                           <button
                             type="button"
                             onClick={() => handleToggleYouDecide(q.id)}
-                            className={`px-3 py-1.5 text-xs font-mono font-medium rounded border transition ${
+                            className={`px-3.5 py-2 text-xs font-sans font-medium rounded-lg border transition ${
                               ans.youDecide
-                                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/70'
-                                : 'bg-zinc-800/60 hover:bg-zinc-800 text-zinc-400 border-zinc-700/70'
+                                ? 'bg-[#1B1B18] text-white border-[#1B1B18]'
+                                : 'bg-white hover:bg-[#F7F6F3] text-[#6B6A63] border-[#E4E2DA]'
                             }`}
                           >
-                            {ans.youDecide ? '✓ You Decide' : 'You Decide'}
+                            {ans.youDecide ? '✓ You decide' : 'You decide'}
                           </button>
                         </div>
                       </div>
@@ -1394,15 +1436,15 @@ export default function Home() {
               )}
 
               {/* Generate Clean Spec Action */}
-              <div className="border-t border-zinc-800 pt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="text-xs font-mono text-zinc-500">
+              <div className="border-t border-[#E4E2DA] pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="text-xs font-sans text-[#6B6A63]">
                   {totalQuestions > 0 && !allQuestionsSatisfied ? (
-                    <span className="text-amber-400">
-                      Answer all questions or select &quot;You Decide&quot; to unlock spec generation.
+                    <span className="text-amber-800">
+                      Answer all questions or select &quot;You decide&quot; to unlock spec generation.
                     </span>
                   ) : (
-                    <span className="text-cyan-400">
-                      Ready to generate clean specification.
+                    <span className="text-emerald-800 font-medium">
+                      Ready to generate clean engineering specification.
                     </span>
                   )}
                 </div>
@@ -1411,91 +1453,79 @@ export default function Home() {
                   type="button"
                   onClick={() => executeGenerateSpec()}
                   disabled={!allQuestionsSatisfied || isLoading}
-                  className="px-5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider bg-cyan-500 hover:bg-cyan-400 text-zinc-950 rounded disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-lg shadow-cyan-950/40 focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+                  className="px-6 py-2.5 text-xs font-sans font-medium bg-[#1B1B18] hover:bg-black text-white rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition shadow-warm-xs"
                 >
-                  Generate Clean Spec &rarr;
+                  Generate clean spec &rarr;
                 </button>
               </div>
             </div>
-          </div>
+          </section>
+        )}
 
-          {/* Right Column (5 cols): Feature 2 Sticky Transcript Highlighter */}
-          <div className="lg:col-span-5 lg:sticky lg:top-20">
-            <TranscriptHighlighter
+        {/* STEP 3: SPEC STAGE */}
+        {!isLoading && step === 'spec' && specResult && (
+          <section aria-labelledby="spec-heading" className="w-full">
+            <SpecViewer
+              specMarkdown={specResult.specMarkdown}
               transcript={transcript}
               lintResult={lintResult}
-              activeFindingId={highlightedFindingId}
-              onSelectFinding={(id) => handleScrollToFinding(id)}
+              answers={answers}
+              specResult={specResult}
+              answerConflicts={specResult.answerConflicts}
+              questions={lintResult?.questions}
+              onBackToFindings={() => setStep('findings')}
+              onStartOver={() => {
+                setStep('input');
+                setLintResult(null);
+                setSpecResult(null);
+                setShowConflictsWarning(true);
+                setIsReadOnlyReport(false);
+                setPreviousSpecMarkdown(null);
+                setTestCases(null);
+                setDiagrams(null);
+                if (typeof window !== 'undefined' && window.location.hash) {
+                  history.replaceState(null, '', window.location.pathname);
+                }
+              }}
+              showConflictsWarning={showConflictsWarning}
+              onGenerateAnyway={() => setShowConflictsWarning(false)}
+              isReadOnlyReport={isReadOnlyReport}
+              onImportSession={handleImportSession}
+              onExitReadOnly={() => {
+                setIsReadOnlyReport(false);
+                if (typeof window !== 'undefined' && window.location.hash) {
+                  history.replaceState(null, '', window.location.pathname);
+                }
+              }}
+              previousSpecMarkdown={previousSpecMarkdown}
+              testCases={testCases}
+              isLoadingTestCases={isGeneratingTestCases}
+              onGenerateTestCases={handleGenerateTestCases}
+              testCasesError={testCasesError}
+              diagrams={diagrams}
+              isLoadingDiagrams={isGeneratingDiagrams}
+              onGenerateDiagrams={handleGenerateDiagrams}
+              diagramsError={diagramsError}
             />
-          </div>
-        </div>
-      </section>
-    )}
+          </section>
+        )}
+      </main>
 
-    {/* STEP 3: SPEC STAGE */}
-    {!isLoading && step === 'spec' && specResult && (
-      <section aria-labelledby="spec-heading" className="w-full">
-        <SpecViewer
-          specMarkdown={specResult.specMarkdown}
-          transcript={transcript}
-          lintResult={lintResult}
-          answers={answers}
-          specResult={specResult}
-          answerConflicts={specResult.answerConflicts}
-          questions={lintResult?.questions}
-          onBackToFindings={() => setStep('findings')}
-          onStartOver={() => {
-            setStep('input');
-            setLintResult(null);
-            setSpecResult(null);
-            setShowConflictsWarning(true);
-            setIsReadOnlyReport(false);
-            setPreviousSpecMarkdown(null);
-            setTestCases(null);
-            setDiagrams(null);
-            if (typeof window !== 'undefined' && window.location.hash) {
-              history.replaceState(null, '', window.location.pathname);
-            }
-          }}
-          showConflictsWarning={showConflictsWarning}
-          onGenerateAnyway={() => setShowConflictsWarning(false)}
-          isReadOnlyReport={isReadOnlyReport}
-          onImportSession={handleImportSession}
-          onExitReadOnly={() => {
-            setIsReadOnlyReport(false);
-            if (typeof window !== 'undefined' && window.location.hash) {
-              history.replaceState(null, '', window.location.pathname);
-            }
-          }}
-          previousSpecMarkdown={previousSpecMarkdown}
-          testCases={testCases}
-          isLoadingTestCases={isGeneratingTestCases}
-          onGenerateTestCases={handleGenerateTestCases}
-          testCasesError={testCasesError}
-          diagrams={diagrams}
-          isLoadingDiagrams={isGeneratingDiagrams}
-          onGenerateDiagrams={handleGenerateDiagrams}
-          diagramsError={diagramsError}
-        />
-      </section>
-    )}
-  </main>
-
-  {/* Feature 6: Recent Sessions Drawer */}
-  <RecentSessionsDrawer
-    isOpen={isRecentDrawerOpen}
-    onClose={() => setIsRecentDrawerOpen(false)}
-    sessions={storedSessions}
-    onSelectSession={handleImportSession}
-    onDeleteSession={(id) => {
-      const updated = deleteStoredSession(id);
-      setStoredSessions(updated);
-    }}
-    onClearAll={() => {
-      clearAllStoredSessions();
-      setStoredSessions([]);
-    }}
-  />
-</div>
-);
+      {/* Feature 6: Recent Sessions Drawer */}
+      <RecentSessionsDrawer
+        isOpen={isRecentDrawerOpen}
+        onClose={() => setIsRecentDrawerOpen(false)}
+        sessions={storedSessions}
+        onSelectSession={handleImportSession}
+        onDeleteSession={(id) => {
+          const updated = deleteStoredSession(id);
+          setStoredSessions(updated);
+        }}
+        onClearAll={() => {
+          clearAllStoredSessions();
+          setStoredSessions([]);
+        }}
+      />
+    </div>
+  );
 }

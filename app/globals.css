@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Editorial Design Tokens */
+  --token-paper-f8: #F8F8F7;
+  --surface-f7: #F7F6F3;
+  --surface-f3: #F3F2EE;
+  --surface-fffff: #FFFFFF;
+  --line-e4e2da: #E4E2DA;
+  --ink-1b: #1B1B18;
+  --ink-1b1b18: #1B1B18;
+  --muted-ink-6b6a63: #6B6A63;
+
+  /* Explicit token names with slash support */
+  --token\/paper\/F8: #F8F8F7;
+  --surface\/F7: #F7F6F3;
+  --surface\/F3: #F3F2EE;
+  --surface\/FFFFF: #FFFFFF;
+  --line\/E4E2DA: #E4E2DA;
+  --ink-1B: #1B1B18;
+  --ink-1B1B18: #1B1B18;
+  --muted-ink-6B6A63: #6B6A63;
+
+  /* Theme mappings */
+  --background: var(--token-paper-f8);
+  --foreground: var(--ink-1b);
+
+  /* Soft warm shadows */
+  --shadow-warm-xs: 0 1px 2px rgba(27, 27, 24, 0.04);
+  --shadow-warm-sm: 0 2px 6px -1px rgba(27, 27, 24, 0.05), 0 1px 3px rgba(27, 27, 24, 0.03);
+  --shadow-warm-md: 0 10px 25px -4px rgba(27, 27, 24, 0.05), 0 4px 10px -2px rgba(27, 27, 24, 0.03);
+  --shadow-warm-lg: 0 20px 35px -6px rgba(27, 27, 24, 0.06), 0 8px 16px -3px rgba(27, 27, 24, 0.03);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-paper: var(--token-paper-f8);
+  --color-surface-f7: var(--surface-f7);
+  --color-surface-f3: var(--surface-f3);
+  --color-surface-white: var(--surface-fffff);
+  --color-line: var(--line-e4e2da);
+  --color-ink: var(--ink-1b);
+  --color-muted-ink: var(--muted-ink-6b6a63);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-sans: var(--font-instrument-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--token-paper-f8);
+  color: var(--ink-1b);
+  font-family: var(--font-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accessible focus ring in blue */
+:focus-visible {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

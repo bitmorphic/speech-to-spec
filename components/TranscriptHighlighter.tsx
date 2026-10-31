@@ -23,7 +23,6 @@ interface SpanMatch {
  */
 function tokenizeWithOffsets(text: string): Array<{ raw: string; normalized: string; start: number; end: number }> {
   const tokens: Array<{ raw: string; normalized: string; start: number; end: number }> = [];
-  // Match word-like sequences
   const regex = /\S+/g;
   let match: RegExpExecArray | null;
 
@@ -197,13 +196,16 @@ export function TranscriptHighlighter({
 
       let styleClasses = '';
       if (span.type === 'sc-earlier') {
-        styleClasses = 'line-through text-zinc-500 bg-zinc-900/90 border-b border-zinc-700';
+        styleClasses = 'line-through text-[#6B6A63] bg-[#F3F2EE] px-1 py-0.5 rounded';
       } else if (span.type === 'sc-final') {
-        styleClasses = 'text-cyan-300 bg-cyan-950/70 border-b-2 border-cyan-400 font-semibold';
+        // Sage tint for final revision
+        styleClasses = 'text-[#166534] bg-[#DCFCE7]/90 border-b-2 border-[#16A34A] font-medium px-1 py-0.5 rounded';
       } else if (span.type === 'c-quoteA') {
-        styleClasses = 'text-amber-300 bg-amber-950/70 border-b-2 border-amber-400 font-semibold';
+        // Amber tint for quote A
+        styleClasses = 'text-[#92400E] bg-[#FEF3C7]/90 border-b-2 border-[#F59E0B] font-medium px-1 py-0.5 rounded';
       } else if (span.type === 'c-quoteB') {
-        styleClasses = 'text-rose-300 bg-rose-950/70 border-b-2 border-rose-400 font-semibold';
+        // Rose tint for quote B
+        styleClasses = 'text-[#991B1B] bg-[#FEE2E2]/90 border-b-2 border-[#EF4444] font-medium px-1 py-0.5 rounded';
       }
 
       elements.push(
@@ -211,10 +213,19 @@ export function TranscriptHighlighter({
           key={`span-${idx}-${span.findingId}`}
           data-finding-id={span.findingId}
           onClick={() => onSelectFinding(span.findingId)}
-          className={`cursor-pointer px-1 py-0.5 rounded transition-all select-text ${styleClasses} ${
-            isActive ? 'ring-2 ring-cyan-400 ring-offset-1 ring-offset-zinc-950 animate-pulse' : 'hover:opacity-90'
+          className={`cursor-pointer transition-all select-text focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${styleClasses} ${
+            isActive
+              ? 'ring-2 ring-[#2563EB] ring-offset-2 ring-offset-white'
+              : 'hover:opacity-90'
           }`}
           title={`Click to view finding #${span.findingId}`}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onSelectFinding(span.findingId);
+            }
+          }}
         >
           {segmentText}
         </mark>
@@ -223,10 +234,10 @@ export function TranscriptHighlighter({
       currentIndex = span.end;
     });
 
-    // Trailing text
+    // Trailing remaining text
     if (currentIndex < transcript.length) {
       elements.push(
-        <span key={`text-end`}>
+        <span key={`text-${currentIndex}`}>
           {transcript.slice(currentIndex)}
         </span>
       );
@@ -236,45 +247,49 @@ export function TranscriptHighlighter({
   }, [transcript, spans, activeFindingId, onSelectFinding]);
 
   return (
-    <aside
-      aria-label="Transcript viewer with findings highlights"
-      className="flex flex-col gap-3 rounded-lg border border-zinc-800 bg-zinc-900/40 p-4 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto"
-      ref={containerRef}
-    >
-      {/* Header and Legend */}
-      <div className="flex flex-col gap-2 border-b border-zinc-800 pb-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
-            Transcript Mirror
-          </h3>
-          <span className="text-[11px] font-mono text-zinc-500">
-            {spans.length} highlighted
-          </span>
-        </div>
+    <div className="flex flex-col gap-4 font-sans text-[#1B1B18]">
+      {/* Transcript Content Box */}
+      <div
+        ref={containerRef}
+        tabIndex={0}
+        aria-label="Annotated Transcript"
+        className="p-6 sm:p-7 rounded-[16px] border border-[#E4E2DA] bg-white text-sm sm:text-base leading-relaxed text-[#1B1B18] font-sans shadow-xs focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
+      >
+        <p className="whitespace-pre-wrap selection:bg-[#F3F2EE]">{renderedSegments}</p>
+      </div>
 
-        {/* Legend */}
-        <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono pt-1">
-          <span className="text-zinc-500 font-semibold">Legend:</span>
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-400 line-through">
-            Earlier statement
-          </span>
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-cyan-950/70 border border-cyan-800 text-cyan-300">
-            Final revision
-          </span>
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-950/70 border border-amber-800 text-amber-300">
+      {/* Legend */}
+      <div className="flex flex-wrap items-center gap-3 sm:gap-4 p-3 rounded-[16px] bg-[#F7F6F3] border border-[#E4E2DA] text-xs font-sans">
+        <span className="text-[#6B6A63] font-medium">Highlight legend:</span>
+
+        <div className="flex items-center gap-1.5">
+          <span className="inline-block px-1.5 py-0.5 rounded text-[11px] bg-[#FEF3C7] text-[#92400E] border-b-2 border-[#F59E0B] font-medium">
             Quote A
           </span>
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-rose-950/70 border border-rose-800 text-rose-300">
+          <span className="text-[#6B6A63]">Amber conflict</span>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <span className="inline-block px-1.5 py-0.5 rounded text-[11px] bg-[#FEE2E2] text-[#991B1B] border-b-2 border-[#EF4444] font-medium">
             Quote B
           </span>
+          <span className="text-[#6B6A63]">Rose conflict</span>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <span className="inline-block px-1.5 py-0.5 rounded text-[11px] bg-[#DCFCE7] text-[#166534] border-b-2 border-[#16A34A] font-medium">
+            Final revision
+          </span>
+          <span className="text-[#6B6A63]">Sage won</span>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <span className="inline-block px-1.5 py-0.5 rounded text-[11px] bg-[#F3F2EE] text-[#6B6A63] line-through">
+            Earlier statement
+          </span>
+          <span className="text-[#6B6A63]">Superseded</span>
         </div>
       </div>
-
-      {/* Transcript body */}
-      <div className="text-xs font-mono text-zinc-300 leading-relaxed whitespace-pre-wrap select-text">
-        {renderedSegments}
-      </div>
-    </aside>
+    </div>
   );
 }
-

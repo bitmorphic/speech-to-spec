@@ -98,48 +98,35 @@ export function BuildPack({
   // Parse acceptance checklist items into GitHub issues text
   const handleCopyGitHubIssues = async () => {
     const lines = specMarkdown.split('\n');
-    const items: string[] = [];
     let inChecklist = false;
+    const checklistItems: string[] = [];
 
     for (const line of lines) {
-      if (line.toLowerCase().includes('acceptance checklist')) {
+      if (line.match(/^#+\s*Acceptance\s+checklist/i)) {
         inChecklist = true;
         continue;
       }
       if (inChecklist && line.startsWith('#')) {
-        break;
+        break; // Reached next section
       }
-      if (inChecklist) {
-        const match = line.match(/^[-*]\s+\[[ xX]\]\s+(.+)$/);
-        if (match && match[1]) {
-          items.push(match[1].trim());
-        }
+      if (inChecklist && line.trim().startsWith('- [')) {
+        const cleaned = line.replace(/^-\s*\[[ xX]\]\s*/, '').trim();
+        if (cleaned) checklistItems.push(cleaned);
       }
     }
 
-    // Fallback if section header was phrased slightly differently
-    if (items.length === 0) {
-      for (const line of lines) {
-        const match = line.match(/^[-*]\s+\[[ xX]\]\s+(.+)$/);
-        if (match && match[1]) {
-          items.push(match[1].trim());
-        }
-      }
+    if (checklistItems.length === 0) {
+      checklistItems.push('Implement core features as specified in specification');
     }
 
-    if (items.length === 0) {
-      items.push('Implement features defined in the specification document.');
-    }
-
-    const issuesMarkdown = items
-      .map((item, idx) => {
-        const title = item.length > 70 ? item.slice(0, 67).trim() + '...' : item;
-        return `### Issue ${idx + 1}: ${title}\n\n**Description:**\n${item}\n\n**Acceptance Criteria:**\n- [ ] ${item}\n\n---\n`;
+    const formattedIssues = checklistItems
+      .map((item, index) => {
+        return `Title: Issue ${index + 1} - ${item}\nBody: Verified acceptance criteria item:\n\n- [ ] ${item}\n\nTraceable to specification acceptance checklist.\n`;
       })
-      .join('\n');
+      .join('\n---\n\n');
 
     try {
-      await navigator.clipboard.writeText(issuesMarkdown);
+      await navigator.clipboard.writeText(formattedIssues);
       setCopiedIssues(true);
       if (issuesTimerRef.current) clearTimeout(issuesTimerRef.current);
       issuesTimerRef.current = setTimeout(() => setCopiedIssues(false), 2000);
@@ -208,40 +195,41 @@ export function BuildPack({
       }
     };
     reader.readAsText(file);
-    // Reset input
     e.target.value = '';
   };
 
   return (
     <section
       aria-labelledby="buildpack-heading"
-      className="rounded-lg border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5 flex flex-col gap-4 shadow-sm"
+      className="rounded-[16px] border border-[#E4E2DA] bg-white p-6 flex flex-col gap-5 shadow-xs font-sans text-[#1B1B18]"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800 pb-3">
-        <div className="flex items-center gap-2">
-          <h3 id="buildpack-heading" className="text-sm font-mono font-bold uppercase tracking-wider text-zinc-200">
-            AI Build Pack
-          </h3>
-          <span className="text-[11px] font-mono rounded bg-cyan-950/70 border border-cyan-800/70 text-cyan-300 px-2 py-0.5 font-semibold">
-            Agent Ready
-          </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E4E2DA] pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 id="buildpack-heading" className="text-sm font-semibold text-[#1B1B18]">
+              AI build pack
+            </h3>
+            <span className="text-[11px] font-sans rounded-full bg-[#F3F2EE] border border-[#E4E2DA] text-[#6B6A63] px-2.5 py-0.5 font-medium">
+              Coding agent ready
+            </span>
+          </div>
+          <p className="text-xs text-[#6B6A63] mt-0.5 font-sans">
+            Ready-to-paste prompts and configuration files formatted for modern coding agents.
+          </p>
         </div>
-        <p className="text-xs text-zinc-400 font-sans">
-          Ready-to-paste prompts formatted for modern coding agents.
-        </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-800/80 pb-2">
+      <div className="flex items-center gap-2 border-b border-[#E4E2DA] pb-3">
         {(['antigravity', 'cursor', 'claude'] as BuildPackTab[]).map((tab) => (
           <button
             key={tab}
             type="button"
             onClick={() => setActiveTab(tab)}
-            className={`px-3 py-1.5 text-xs font-mono rounded transition-colors ${
+            className={`px-3.5 py-1.5 text-xs rounded-full font-medium transition-colors ${
               activeTab === tab
-                ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/50 font-bold'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40'
+                ? 'bg-[#1B1B18] text-white'
+                : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
             }`}
           >
             {tab === 'antigravity'
@@ -253,30 +241,28 @@ export function BuildPack({
         ))}
       </div>
 
-      {/* Prompt preview box */}
-      <div className="relative">
-        <textarea
-          readOnly
-          value={tabPrompt}
-          rows={7}
-          className="w-full rounded bg-zinc-950 border border-zinc-800 p-3 text-xs font-mono text-zinc-300 select-all focus:outline-none focus:border-cyan-500"
-        />
+      {/* Prompt Preview */}
+      <div className="relative rounded-[16px] border border-[#E4E2DA] bg-[#F8F8F7] p-4 text-xs font-mono max-h-56 overflow-y-auto">
+        <pre className="text-[#1B1B18] whitespace-pre-wrap font-mono leading-relaxed select-all">
+          {tabPrompt}
+        </pre>
       </div>
 
-      {/* Action buttons */}
-      <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+      {/* Action Buttons Toolbar */}
+      <div className="flex flex-wrap items-center gap-2 pt-1">
         <button
           type="button"
           onClick={handleCopyPrompt}
-          className="px-3 py-1.5 rounded font-bold bg-cyan-500 hover:bg-cyan-400 text-zinc-950 transition flex items-center gap-1.5 shadow-xs"
+          className="px-4 py-2 text-xs font-sans bg-[#1B1B18] hover:bg-black text-white rounded-xl transition flex items-center gap-1.5 shadow-sm font-medium focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
         >
-          {copiedPrompt ? '✓ Copied Prompt' : 'Copy Prompt'}
+          {copiedPrompt ? 'Copied to clipboard' : 'Copy agent prompt'}
         </button>
 
         <button
           type="button"
           onClick={handleDownloadAgents}
-          className="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition"
+          className="px-3.5 py-2 text-xs font-sans bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-xl transition flex items-center gap-1.5 shadow-xs font-medium focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
+          title="Download AGENTS.md for Antigravity"
         >
           Download AGENTS.md
         </button>
@@ -284,7 +270,8 @@ export function BuildPack({
         <button
           type="button"
           onClick={handleDownloadClaude}
-          className="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition"
+          className="px-3.5 py-2 text-xs font-sans bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-xl transition flex items-center gap-1.5 shadow-xs font-medium focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
+          title="Download CLAUDE.md for Claude Code"
         >
           Download CLAUDE.md
         </button>
@@ -292,37 +279,43 @@ export function BuildPack({
         <button
           type="button"
           onClick={handleCopyGitHubIssues}
-          className="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition"
+          className="px-3.5 py-2 text-xs font-sans bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-xl transition flex items-center gap-1.5 shadow-xs font-medium focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
+          title="Copy acceptance checklist items as formatted GitHub issue blocks"
         >
-          {copiedIssues ? '✓ Copied Issues!' : 'Copy as GitHub Issues'}
+          {copiedIssues ? 'Copied issues' : 'Copy as GitHub issues'}
         </button>
 
         <button
           type="button"
           onClick={handleDownloadSession}
-          className="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition"
+          className="px-3.5 py-2 text-xs font-sans bg-white hover:bg-[#F7F6F3] text-[#1B1B18] border border-[#E4E2DA] rounded-xl transition flex items-center gap-1.5 shadow-xs font-medium focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
+          title="Download complete session state as JSON backup"
         >
           Download session JSON
         </button>
 
-        <label className="px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700/80 cursor-pointer transition">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="px-3.5 py-2 text-xs font-sans bg-white hover:bg-[#F7F6F3] text-[#6B6A63] hover:text-[#1B1B18] border border-[#E4E2DA] rounded-xl transition flex items-center gap-1.5 shadow-xs font-medium focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ml-auto"
+          title="Import session state from a downloaded JSON file"
+        >
           Import session JSON
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            onChange={handleImportFile}
-            className="hidden"
-          />
-        </label>
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json,application/json"
+          onChange={handleImportFile}
+          className="hidden"
+        />
       </div>
 
       {importError && (
-        <div className="p-2.5 rounded bg-rose-950/40 border border-rose-800/80 text-rose-300 font-mono text-xs">
+        <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900 font-sans">
           {importError}
         </div>
       )}
     </section>
   );
 }
-

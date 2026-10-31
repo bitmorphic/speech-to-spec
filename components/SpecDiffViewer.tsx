@@ -29,31 +29,31 @@ export function SpecDiffViewer({
   }, [previousSpecMarkdown, currentSpecMarkdown]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 font-sans text-[#1B1B18]">
       {/* Diff stats bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-lg border border-zinc-800 bg-zinc-900/60 font-mono text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-[16px] border border-[#E4E2DA] bg-white shadow-xs text-xs">
         <div className="flex items-center gap-3">
-          <span className="font-semibold text-zinc-200">
-            Specification Changes
+          <span className="font-semibold text-[#1B1B18]">
+            Specification changes
           </span>
-          <div className="flex items-center gap-2 text-[11px]">
-            <span className="px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300 font-bold">
+          <div className="flex items-center gap-2 text-[11px] font-mono">
+            <span className="px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
               +{addedCount} added
             </span>
-            <span className="px-2 py-0.5 rounded bg-rose-950/80 border border-rose-800/80 text-rose-300 font-bold">
+            <span className="px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-rose-800 font-medium">
               -{removedCount} removed
             </span>
           </div>
         </div>
 
-        <span className="text-zinc-500 text-[11px]">
-          Comparing regenerated spec with previous version
+        <span className="text-[#6B6A63] text-[11px]">
+          Comparing regenerated specification with previous version
         </span>
       </div>
 
       {/* Diff container */}
-      <div className="rounded-lg border border-zinc-800 bg-zinc-950 overflow-x-auto text-xs font-mono">
-        <pre className="p-4 leading-relaxed font-mono">
+      <div className="rounded-[16px] border border-[#E4E2DA] bg-[#F8F8F7] overflow-x-auto text-xs font-mono shadow-xs">
+        <pre className="p-4 leading-relaxed">
           {lineDiffs.map((part, index) => {
             const lines = part.value.replace(/\n$/, '').split('\n');
 
@@ -61,9 +61,9 @@ export function SpecDiffViewer({
               return lines.map((line, lineIdx) => (
                 <div
                   key={`${index}-${lineIdx}`}
-                  className="bg-emerald-950/40 text-emerald-300 border-l-2 border-emerald-500 px-2 py-0.5 whitespace-pre flex items-start gap-2"
+                  className="bg-emerald-50 text-emerald-900 border-l-2 border-emerald-600 px-3 py-0.5 whitespace-pre flex items-start gap-2"
                 >
-                  <span className="text-emerald-500/70 select-none font-bold shrink-0">+</span>
+                  <span className="text-emerald-700 select-none font-bold shrink-0">+</span>
                   <span className="break-all">{line}</span>
                 </div>
               ));
@@ -73,9 +73,9 @@ export function SpecDiffViewer({
               return lines.map((line, lineIdx) => (
                 <div
                   key={`${index}-${lineIdx}`}
-                  className="bg-rose-950/40 text-rose-300/90 border-l-2 border-rose-500 line-through px-2 py-0.5 whitespace-pre flex items-start gap-2"
+                  className="bg-rose-50 text-rose-900 border-l-2 border-rose-600 line-through px-3 py-0.5 whitespace-pre flex items-start gap-2"
                 >
-                  <span className="text-rose-500/70 select-none font-bold shrink-0">-</span>
+                  <span className="text-rose-700 select-none font-bold shrink-0">-</span>
                   <span className="break-all">{line}</span>
                 </div>
               ));
@@ -84,9 +84,9 @@ export function SpecDiffViewer({
             return lines.map((line, lineIdx) => (
               <div
                 key={`${index}-${lineIdx}`}
-                className="text-zinc-400 px-2 py-0.5 whitespace-pre flex items-start gap-2"
+                className="text-[#6B6A63] px-3 py-0.5 whitespace-pre flex items-start gap-2"
               >
-                <span className="text-zinc-600 select-none shrink-0">&nbsp;</span>
+                <span className="text-stone-400 select-none shrink-0">&nbsp;</span>
                 <span className="break-all">{line}</span>
               </div>
             ));
@@ -96,4 +96,3 @@ export function SpecDiffViewer({
     </div>
   );
 }
-

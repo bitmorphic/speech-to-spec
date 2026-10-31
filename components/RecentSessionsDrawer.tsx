@@ -38,19 +38,19 @@ export function RecentSessionsDrawer({
       role="dialog"
       aria-modal="true"
       aria-labelledby="recent-sessions-title"
-      className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex justify-end bg-black/30 backdrop-blur-xs font-sans"
     >
       {/* Backdrop click area */}
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Drawer Panel */}
-      <div className="relative w-full max-w-md h-full bg-zinc-950 border-l border-zinc-800 p-5 flex flex-col gap-4 shadow-2xl z-10 overflow-y-auto">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+      <div className="relative w-full max-w-md h-full bg-[#FFFFFF] border-l border-[#E4E2DA] p-6 flex flex-col gap-5 shadow-2xl z-10 overflow-y-auto text-[#1B1B18]">
+        <div className="flex items-center justify-between border-b border-[#E4E2DA] pb-4">
           <div>
-            <h2 id="recent-sessions-title" className="text-sm font-mono font-bold uppercase tracking-wider text-zinc-100">
-              Recent Sessions
+            <h2 id="recent-sessions-title" className="text-base font-serif text-[#1B1B18]">
+              Recent sessions
             </h2>
-            <p className="text-[11px] text-zinc-400 font-sans">
+            <p className="text-xs text-[#6B6A63] font-sans mt-0.5">
               Sessions stay in this browser.
             </p>
           </div>
@@ -58,80 +58,103 @@ export function RecentSessionsDrawer({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close drawer"
-            className="p-1 rounded text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition font-mono text-sm focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none"
+            className="p-1.5 rounded-full text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE] transition focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none"
+            aria-label="Close recent sessions drawer"
           >
-            ✕
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
-        {sessions.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-zinc-500 font-mono text-xs">
-            No saved sessions yet. Completed specifications will appear here automatically.
-          </div>
-        ) : (
-          <div className="flex-1 flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-mono text-zinc-400">
-                {sessions.length} / 10 stored
-              </span>
-              <button
-                type="button"
-                onClick={onClearAll}
-                className="text-xs font-mono text-rose-400 hover:text-rose-300 transition underline"
-              >
-                Clear all
-              </button>
+        {/* Sessions list */}
+        <div className="flex-1 overflow-y-auto flex flex-col gap-3 pr-1">
+          {sessions.length === 0 ? (
+            <div className="p-8 text-center text-xs text-[#6B6A63] font-sans rounded-2xl bg-[#F7F6F3] border border-[#E4E2DA]">
+              No recent sessions found. Completed specs will be saved here automatically.
             </div>
+          ) : (
+            sessions.map((s) => {
+              const dateStr = new Date(s.timestamp).toLocaleDateString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              });
 
-            <div className="flex flex-col gap-2.5">
-              {sessions.map((s) => {
-                const dateStr = new Date(s.timestamp).toLocaleString();
-                return (
-                  <div
-                    key={s.id}
-                    className="p-3 rounded-lg border border-zinc-800 bg-zinc-900/50 flex flex-col gap-2 transition hover:border-zinc-700"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-xs font-semibold text-zinc-200 font-sans line-clamp-2">
-                        {s.title}
-                      </h3>
-                      <button
-                        type="button"
-                        onClick={() => onDeleteSession(s.id)}
-                        title="Delete session"
-                        aria-label={`Delete session ${s.title}`}
-                        className="text-zinc-500 hover:text-rose-400 text-xs font-mono transition p-0.5"
+              return (
+                <div
+                  key={s.id}
+                  className="p-4 rounded-[16px] border border-[#E4E2DA] bg-[#F7F6F3] hover:bg-white hover:border-[#1B1B18] transition-all flex flex-col gap-2.5 text-xs shadow-xs"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="text-[11px] font-mono text-[#6B6A63]">
+                      {dateStr}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onDeleteSession(s.id)}
+                      className="text-[#6B6A63] hover:text-rose-600 p-1 rounded transition"
+                      title="Delete session"
+                      aria-label="Delete session"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={1.75}
                       >
-                        ✕
-                      </button>
-                    </div>
-
-                    <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500">
-                      <span>{dateStr}</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onSelectSession(s);
-                          onClose();
-                        }}
-                        className="text-cyan-400 hover:text-cyan-300 font-bold underline"
-                      >
-                        Reopen &rarr;
-                      </button>
-                    </div>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
                   </div>
-                );
-              })}
-            </div>
+
+                  <p className="line-clamp-2 text-[#1B1B18] leading-relaxed font-sans">
+                    {s.transcript}
+                  </p>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-[#E4E2DA]/80">
+                    <span className="text-[11px] text-[#6B6A63]">
+                      {s.specResult?.specMarkdown ? 'Spec ready' : 'Draft'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onSelectSession(s)}
+                      className="text-xs font-medium text-[#1B1B18] hover:underline transition"
+                    >
+                      Reopen &rarr;
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Footer actions */}
+        {sessions.length > 0 && (
+          <div className="pt-3 border-t border-[#E4E2DA]">
+            <button
+              type="button"
+              onClick={onClearAll}
+              className="w-full py-2 px-3 rounded-xl border border-[#E4E2DA] hover:bg-rose-50 hover:text-rose-700 text-xs text-[#6B6A63] font-medium transition"
+            >
+              Clear all sessions
+            </button>
           </div>
         )}
-
-        <div className="pt-3 border-t border-zinc-800 text-[11px] text-zinc-500 font-mono text-center">
-          Persisted locally via browser localStorage.
-        </div>
       </div>
     </div>
   );
 }
-

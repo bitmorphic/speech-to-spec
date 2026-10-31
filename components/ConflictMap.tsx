@@ -77,13 +77,13 @@ export function ConflictMap({
 
     const edgeList: GraphEdge[] = [];
     for (const c of contradictions) {
-      const source = nodeByQuote.get(c.quoteA);
-      const target = nodeByQuote.get(c.quoteB);
-      if (source && target) {
+      const src = nodeByQuote.get(c.quoteA);
+      const tgt = nodeByQuote.get(c.quoteB);
+      if (src && tgt && src !== tgt) {
         edgeList.push({
           contradiction: c,
-          source,
-          target,
+          source: src,
+          target: tgt,
         });
       }
     }
@@ -91,87 +91,72 @@ export function ConflictMap({
     return { nodes: nodeList, edges: edgeList, exceedsLimit: false };
   }, [contradictions]);
 
-  // Selected contradiction details
-  const activeContradiction = useMemo(() => {
-    if (!selectedEdgeId) return null;
-    return contradictions.find((c) => c.id === selectedEdgeId) || null;
-  }, [selectedEdgeId, contradictions]);
-
-  // Questions related to selected contradiction
-  const relatedQuestions = useMemo(() => {
-    if (!activeContradiction) return [];
-    return questions.filter((q) => q.relatesTo && q.relatesTo.includes(activeContradiction.id));
-  }, [activeContradiction, questions]);
-
+  // If more than 14 nodes, fall back gracefully
   if (exceedsLimit) {
     return (
-      <div className="p-4 rounded-lg border border-zinc-800 bg-zinc-900/30 text-xs font-mono text-zinc-400">
-        Over 14 distinct quotes detected. Graph view falls back to the list view to preserve legibility.
+      <div className="p-4 rounded-[16px] border border-[#E4E2DA] bg-[#F7F6F3] text-xs text-[#6B6A63] font-sans">
+        Conflict graph contains more than 14 statements; falling back to list view for clarity.
       </div>
     );
   }
 
   if (nodes.length === 0) {
     return (
-      <div className="p-4 rounded-lg border border-zinc-800 bg-zinc-900/30 text-xs font-mono text-zinc-500">
-        No contradictions available to map.
+      <div className="p-4 rounded-[16px] border border-[#E4E2DA] bg-[#F7F6F3] text-xs text-[#6B6A63] font-sans">
+        No contradictions detected to map.
       </div>
     );
   }
 
+  const activeContradiction = contradictions.find((c) => c.id === selectedEdgeId);
+  const relatedQuestions = questions.filter(
+    (q) => activeContradiction && q.relatesTo && q.relatesTo.includes(activeContradiction.id)
+  );
+
   return (
-    <div className="flex flex-col gap-4 p-4 rounded-lg border border-zinc-800 bg-zinc-900/40">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2.5">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
-            Conflict Graph Map
-          </span>
-          <span className="text-[11px] font-mono text-zinc-500">
-            ({nodes.length} nodes, {edges.length} edges)
-          </span>
+    <div className="flex flex-col gap-4 p-5 rounded-[16px] border border-[#E4E2DA] bg-white shadow-xs font-sans text-[#1B1B18]">
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xs font-sans font-semibold text-[#1B1B18]">
+            Contradiction map
+          </h3>
+          <p className="text-[11px] text-[#6B6A63]">
+            Statements placed on circle. Edges indicate direct contradictions. Click an edge to inspect.
+          </p>
         </div>
-        <div className="flex items-center gap-3 text-[11px] font-mono">
-          <span className="flex items-center gap-1 text-rose-300">
-            <span className="w-2.5 h-0.5 bg-rose-500 rounded inline-block" /> High
-          </span>
-          <span className="flex items-center gap-1 text-amber-300">
-            <span className="w-2.5 h-0.5 bg-amber-500 rounded inline-block" /> Medium
-          </span>
+
+        {/* Legend */}
+        <div className="flex items-center gap-3 text-[11px] font-sans">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#EF4444]" />
+            <span className="text-[#6B6A63]">High severity</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]" />
+            <span className="text-[#6B6A63]">Medium severity</span>
+          </div>
         </div>
       </div>
 
       {/* SVG Canvas */}
-      <div className="relative w-full aspect-square max-w-[480px] mx-auto bg-zinc-950/80 rounded-lg border border-zinc-800/80 p-2 overflow-hidden">
+      <div className="relative w-full aspect-square max-w-[500px] mx-auto bg-[#F8F8F7] rounded-[16px] border border-[#E4E2DA] p-2 flex items-center justify-center">
         <svg
           viewBox="0 0 500 500"
-          className="w-full h-full"
-          role="img"
-          aria-label="Interactive graph of conflicting transcript statements"
+          className="w-full h-full select-none"
+          aria-label="Interactive Contradiction Graph"
         >
+          {/* Subtle perimeter circle */}
+          <circle cx="250" cy="250" r="175" fill="none" stroke="#E4E2DA" strokeWidth="1" strokeDasharray="4 4" />
+
           {/* Edges */}
-          {edges.map((edge) => {
+          {edges.map((edge, idx) => {
             const isSelected = selectedEdgeId === edge.contradiction.id;
             const strokeColor =
-              edge.contradiction.severity === 'high' ? '#f43f5e' : '#f59e0b';
-            const strokeWidth = isSelected ? 4 : 2;
+              edge.contradiction.severity === 'high' ? '#EF4444' : '#F59E0B';
+            const strokeWidth = isSelected ? 3.5 : 2;
 
             return (
-              <g key={`edge-${edge.contradiction.id}`}>
-                {/* Invisible hit-area line for easy clicking */}
-                <line
-                  x1={edge.source.x}
-                  y1={edge.source.y}
-                  x2={edge.target.x}
-                  y2={edge.target.y}
-                  stroke="transparent"
-                  strokeWidth={16}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setSelectedEdgeId(edge.contradiction.id);
-                    if (onSelectContradiction) onSelectContradiction(edge.contradiction.id);
-                  }}
-                />
-                {/* Visible styled edge */}
+              <g key={`edge-${idx}-${edge.contradiction.id}`}>
                 <line
                   x1={edge.source.x}
                   y1={edge.source.y}
@@ -179,7 +164,7 @@ export function ConflictMap({
                   y2={edge.target.y}
                   stroke={strokeColor}
                   strokeWidth={strokeWidth}
-                  strokeOpacity={isSelected ? 1 : 0.75}
+                  strokeOpacity={isSelected ? 1 : 0.7}
                   className="cursor-pointer transition-all"
                   onClick={() => {
                     setSelectedEdgeId(edge.contradiction.id);
@@ -209,8 +194,8 @@ export function ConflictMap({
                   cx={node.x}
                   cy={node.y}
                   r={isHovered ? 8 : 6}
-                  fill={isHovered ? '#22d3ee' : '#3f3f46'}
-                  stroke="#18181b"
+                  fill={isHovered ? '#2563EB' : '#1B1B18'}
+                  stroke="#FFFFFF"
                   strokeWidth={2}
                   className="transition-all"
                 />
@@ -219,9 +204,10 @@ export function ConflictMap({
                   x={node.x}
                   y={node.y > 250 ? node.y + 16 : node.y - 12}
                   textAnchor="middle"
-                  fill="#d4d4d8"
+                  fill="#1B1B18"
                   fontSize="10"
-                  fontFamily="monospace"
+                  fontFamily="sans-serif"
+                  fontWeight="500"
                   className="pointer-events-none select-none"
                 >
                   {node.shortLabel}
@@ -234,7 +220,7 @@ export function ConflictMap({
 
         {/* Hovered node full quote tooltip */}
         {hoveredNodeIndex !== null && nodes[hoveredNodeIndex] && (
-          <div className="absolute bottom-2 left-2 right-2 p-2 rounded bg-zinc-900 border border-zinc-700 text-xs font-mono text-cyan-300 shadow-lg pointer-events-none z-20">
+          <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-white border border-[#E4E2DA] text-xs text-[#1B1B18] shadow-md pointer-events-none z-20 font-sans">
             &quot;{nodes[hoveredNodeIndex].quote}&quot;
           </div>
         )}
@@ -242,49 +228,46 @@ export function ConflictMap({
 
       {/* Selected Edge Inspector Card */}
       {activeContradiction && (
-        <article className="p-3.5 rounded-lg border border-cyan-800/80 bg-zinc-950 text-xs flex flex-col gap-2.5 animate-fadeIn">
+        <article className="p-4 rounded-[16px] border border-[#E4E2DA] bg-[#F7F6F3] text-xs flex flex-col gap-3 font-sans">
           <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-xs text-zinc-300 bg-zinc-800 px-2 py-0.5 rounded font-bold">
+            <span className="font-mono text-xs text-[#1B1B18] bg-white border border-[#E4E2DA] px-2 py-0.5 rounded font-medium">
               {activeContradiction.id}
             </span>
             <span
-              className={`text-[10px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${
+              className={`text-[11px] font-sans font-medium px-2 py-0.5 rounded border ${
                 activeContradiction.severity === 'high'
-                  ? 'border-rose-800 bg-rose-950/80 text-rose-300'
-                  : 'border-amber-800 bg-amber-950/80 text-amber-300'
+                  ? 'border-rose-200 bg-rose-50 text-rose-800'
+                  : 'border-amber-200 bg-amber-50 text-amber-800'
               }`}
             >
               {activeContradiction.severity} severity
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-[11px]">
-            <div className="p-2 rounded bg-zinc-900 border border-zinc-800">
-              <span className="text-[10px] text-zinc-500 uppercase block font-bold">Quote A</span>
-              <span className="text-zinc-200">&quot;{activeContradiction.quoteA}&quot;</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div className="p-3 rounded-xl bg-white border border-[#E4E2DA]">
+              <span className="text-[10px] text-[#6B6A63] uppercase block font-medium">Quote A</span>
+              <span className="text-[#1B1B18] leading-relaxed">&quot;{activeContradiction.quoteA}&quot;</span>
             </div>
-            <div className="p-2 rounded bg-zinc-900 border border-zinc-800">
-              <span className="text-[10px] text-zinc-500 uppercase block font-bold">Quote B</span>
-              <span className="text-zinc-200">&quot;{activeContradiction.quoteB}&quot;</span>
+            <div className="p-3 rounded-xl bg-white border border-[#E4E2DA]">
+              <span className="text-[10px] text-[#6B6A63] uppercase block font-medium">Quote B</span>
+              <span className="text-[#1B1B18] leading-relaxed">&quot;{activeContradiction.quoteB}&quot;</span>
             </div>
           </div>
 
-          <p className="text-zinc-300 font-sans text-xs">
-            <strong className="text-zinc-400 font-mono">Why:</strong> {activeContradiction.why}
+          <p className="text-[#1B1B18] leading-relaxed">
+            <strong className="text-[#6B6A63]">Why:</strong> {activeContradiction.why}
           </p>
 
           {/* Related questions */}
           {relatedQuestions.length > 0 && (
-            <div className="pt-2 border-t border-zinc-800 flex flex-col gap-1.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-semibold">
-                Clarifying Questions for this conflict:
+            <div className="pt-2 border-t border-[#E4E2DA] flex flex-col gap-1.5">
+              <span className="text-[11px] text-[#6B6A63] font-medium">
+                Clarifying questions for this conflict:
               </span>
-              <ul className="list-disc list-inside space-y-1 text-zinc-300 text-xs">
+              <ul className="list-disc list-inside space-y-1 text-xs text-[#1B1B18]">
                 {relatedQuestions.map((q) => (
-                  <li key={q.id}>
-                    <span className="font-mono text-cyan-400 mr-1.5">#{q.id}:</span>
-                    {q.question}
-                  </li>
+                  <li key={q.id}>{q.question}</li>
                 ))}
               </ul>
             </div>
@@ -294,4 +277,3 @@ export function ConflictMap({
     </div>
   );
 }
-

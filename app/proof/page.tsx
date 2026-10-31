@@ -67,21 +67,21 @@ export default function ProofPage() {
   const { data, mode } = loadProofData();
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F8F8F7] text-[#1B1B18] flex flex-col font-sans">
       <AppHeader />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex flex-col gap-8">
         {/* Page Title */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs text-cyan-400 font-semibold border border-cyan-500/30 bg-cyan-950/40 px-2 py-0.5 rounded">
+            <span className="font-mono text-xs text-[#6B6A63] font-medium border border-[#E4E2DA] bg-white px-2.5 py-0.5 rounded-full">
               EMPIRICAL PROOF &amp; BENCHMARK
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100 font-sans">
-            Raw Transcript vs. Linted Spec
+          <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-[#1B1B18]">
+            Raw transcript vs. Linted spec
           </h1>
-          <p className="text-sm text-zinc-400 max-w-2xl font-sans">
+          <p className="text-sm text-[#6B6A63] max-w-2xl font-sans">
             Direct comparison of software artifacts built by autonomous coding agents with raw spoken dictation versus Speech to Spec requirements.
           </p>
         </div>
@@ -90,11 +90,11 @@ export default function ProofPage() {
         {mode === 'placeholder' && (
           <div
             role="status"
-            className="p-4 rounded-lg border border-amber-900/60 bg-amber-950/30 text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+            className="p-4 sm:p-5 rounded-[16px] border border-amber-200 bg-amber-50/80 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-warm-xs"
           >
             <div className="flex items-start gap-2.5">
               <svg
-                className="w-4 h-4 text-amber-400 shrink-0 mt-0.5"
+                className="w-4 h-4 text-amber-800 shrink-0 mt-0.5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -107,16 +107,16 @@ export default function ProofPage() {
                 />
               </svg>
               <div className="flex flex-col gap-0.5">
-                <span className="font-mono font-bold uppercase tracking-wider text-amber-300">
-                  Placeholder Data Active
+                <span className="font-sans font-medium uppercase tracking-wider text-amber-900">
+                  Placeholder data active
                 </span>
-                <span className="text-amber-200/90 font-sans">
-                  Displaying simulated benchmark data from <code className="bg-amber-950 px-1 py-0.5 rounded border border-amber-800 font-mono text-[11px]">data/proof.example.json</code>.
-                  To display your real benchmark results, create <code className="bg-amber-950 px-1 py-0.5 rounded border border-amber-800 font-mono text-[11px]">data/proof.json</code>.
+                <span className="text-amber-900/90 font-sans">
+                  Displaying simulated benchmark data from <code className="bg-amber-100 px-1 py-0.5 rounded border border-amber-200 font-mono text-[11px]">data/proof.example.json</code>.
+                  To display your real benchmark results, create <code className="bg-amber-100 px-1 py-0.5 rounded border border-amber-200 font-mono text-[11px]">data/proof.json</code>.
                 </span>
               </div>
             </div>
-            <span className="px-2 py-1 rounded bg-amber-900/40 border border-amber-700/60 text-amber-300 font-mono text-[11px] shrink-0 self-start sm:self-center">
+            <span className="px-2.5 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-mono text-[11px] shrink-0 self-start sm:self-center">
               DEMO MODE
             </span>
           </div>
@@ -126,17 +126,17 @@ export default function ProofPage() {
         {mode === 'missing' && (
           <section
             aria-labelledby="filling-instructions-heading"
-            className="p-6 rounded-lg border border-zinc-800 bg-zinc-900/50 flex flex-col gap-4"
+            className="p-6 rounded-[16px] border border-[#E4E2DA] bg-white flex flex-col gap-4 shadow-warm-xs"
           >
-            <h2 id="filling-instructions-heading" className="text-base font-semibold text-zinc-100 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-cyan-400" />
-              Proof Benchmark Filling Instructions
+            <h2 id="filling-instructions-heading" className="text-lg font-serif font-normal text-[#1B1B18] flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#1B1B18]" />
+              Proof benchmark filling instructions
             </h2>
-            <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-              Neither <code className="text-cyan-400 font-mono">data/proof.json</code> nor <code className="text-cyan-400 font-mono">data/proof.example.json</code> was found.
+            <p className="text-xs text-[#1B1B18]/80 leading-relaxed font-sans">
+              Neither <code className="text-[#1B1B18] font-mono font-medium">data/proof.json</code> nor <code className="text-[#1B1B18] font-mono font-medium">data/proof.example.json</code> was found.
               To display an empirical comparison on this page, create a JSON file with the following structure:
             </p>
-            <div className="bg-zinc-950 p-4 rounded-lg border border-zinc-800 overflow-x-auto text-xs font-mono text-cyan-300">
+            <div className="bg-[#F7F6F3] p-4 rounded-xl border border-[#E4E2DA] overflow-x-auto text-xs font-mono text-[#1B1B18]">
               <pre>{`{
   "title": "Build Benchmark",
   "rawTranscript": {
@@ -157,8 +157,8 @@ export default function ProofPage() {
   }
 }`}</pre>
             </div>
-            <p className="text-xs text-zinc-400 font-sans">
-              Place corresponding screenshot images inside the <code className="text-zinc-200 font-mono">public/proof/</code> directory.
+            <p className="text-xs text-[#6B6A63] font-sans">
+              Place corresponding screenshot images inside the <code className="text-[#1B1B18] font-mono">public/proof/</code> directory.
             </p>
           </section>
         )}
@@ -169,38 +169,38 @@ export default function ProofPage() {
             {/* Defect Comparison Strip */}
             <section
               aria-label="Defect Comparison Strip"
-              className="p-4 sm:p-5 rounded-lg border border-zinc-800 bg-zinc-900/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs"
+              className="p-4 sm:p-5 rounded-[16px] border border-[#E4E2DA] bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-warm-xs"
             >
               <div className="flex items-center gap-4">
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                    Defect Comparison
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#6B6A63]">
+                    Defect comparison
                   </span>
-                  <span className="text-sm font-semibold text-zinc-200 font-sans">
-                    Agent Build Failure Rate
+                  <span className="text-sm font-serif font-normal text-[#1B1B18]">
+                    Agent build failure rate
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-4 sm:gap-8 font-mono">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-zinc-400">Raw Dictation:</span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-800 text-xs font-bold">
+                  <span className="text-xs text-[#6B6A63] font-sans">Raw dictation:</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-200 text-xs font-medium">
                     {data.rawTranscript?.defectCount ?? data.rawTranscript?.defects?.length ?? 0} defects
                   </span>
                 </div>
 
-                <span className="text-zinc-600 text-sm">&rarr;</span>
+                <span className="text-[#E4E2DA] text-sm">&rarr;</span>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-zinc-400">Linted Spec:</span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold">
+                  <span className="text-xs text-[#6B6A63] font-sans">Linted spec:</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-medium">
                     {data.lintedSpec?.defectCount ?? data.lintedSpec?.defects?.length ?? 0} defects
                   </span>
                 </div>
 
                 {(data.rawTranscript?.defectCount ?? 0) > 0 && (
-                  <div className="hidden md:flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-800/80 text-cyan-300 text-xs font-bold">
+                  <div className="hidden md:flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#1B1B18] text-white text-xs font-medium font-sans">
                     <span>
                       {Math.round(
                         (((data.rawTranscript?.defectCount ?? 0) - (data.lintedSpec?.defectCount ?? 0)) /
@@ -217,9 +217,9 @@ export default function ProofPage() {
             {/* Two Columns: Raw Transcript vs Linted Spec */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Column 1: Built from Raw Transcript */}
-              <article className="rounded-lg border border-rose-900/40 bg-zinc-900/50 overflow-hidden flex flex-col">
+              <article className="rounded-[16px] border border-[#E4E2DA] bg-white overflow-hidden flex flex-col shadow-warm-xs">
                 {/* Screenshot Above */}
-                <div className="relative w-full aspect-video bg-zinc-950 border-b border-zinc-800/80 flex items-center justify-center overflow-hidden">
+                <div className="relative w-full aspect-video bg-[#F7F6F3] border-b border-[#E4E2DA] flex items-center justify-center overflow-hidden">
                   {data.rawTranscript.screenshot ? (
                     <img
                       src={data.rawTranscript.screenshot}
@@ -227,32 +227,32 @@ export default function ProofPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="p-8 text-center text-xs text-zinc-600 font-mono">
+                    <div className="p-8 text-center text-xs text-[#6B6A63] font-sans">
                       No screenshot provided in public/proof
                     </div>
                   )}
-                  <span className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-rose-950/90 text-rose-300 border border-rose-800/80 font-bold backdrop-blur-xs">
-                    Raw Transcript Build
+                  <span className="absolute top-3 left-3 px-2.5 py-0.5 text-[11px] font-sans uppercase tracking-wider rounded-full bg-white text-rose-800 border border-rose-200 font-medium shadow-xs">
+                    Raw transcript build
                   </span>
                 </div>
 
                 <div className="p-5 sm:p-6 flex flex-col gap-4 flex-1">
                   <div>
-                    <h2 className="text-base font-semibold text-rose-300 tracking-tight">
-                      {data.rawTranscript.title || 'Built from Raw Transcript'}
+                    <h2 className="text-lg font-serif font-normal text-[#1B1B18] tracking-tight">
+                      {data.rawTranscript.title || 'Built from raw transcript'}
                     </h2>
-                    <p className="text-xs text-zinc-300 mt-1 leading-relaxed font-sans">
+                    <p className="text-xs text-[#1B1B18]/80 mt-1 leading-relaxed font-sans">
                       {data.rawTranscript.summary}
                     </p>
                   </div>
 
                   {/* Defect List */}
-                  <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-zinc-800/80">
-                    <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-zinc-400 font-bold uppercase tracking-wider">
-                        Documented Defects
+                  <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-[#E4E2DA]">
+                    <div className="flex items-center justify-between text-xs font-sans">
+                      <span className="text-[#6B6A63] font-medium">
+                        Documented defects
                       </span>
-                      <span className="text-rose-400 font-bold">
+                      <span className="text-rose-800 font-medium">
                         {data.rawTranscript.defects?.length || data.rawTranscript.defectCount || 0} issues
                       </span>
                     </div>
@@ -262,31 +262,31 @@ export default function ProofPage() {
                         data.rawTranscript.defects.map((defect) => (
                           <div
                             key={defect.id}
-                            className="p-3 rounded-md bg-zinc-950/70 border border-zinc-800/80 flex flex-col gap-1 text-xs"
+                            className="p-3.5 rounded-[12px] bg-[#F8F8F7] border border-[#E4E2DA] flex flex-col gap-1 text-xs"
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <span className="font-mono text-[11px] font-bold text-rose-300">
+                              <span className="font-mono text-[11px] font-medium text-[#1B1B18]">
                                 {defect.id}: {defect.title}
                               </span>
                               {defect.severity && (
                                 <span
-                                  className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.2 rounded border ${
+                                  className={`text-[10px] font-sans uppercase tracking-wider px-2 py-0.5 rounded-full border ${
                                     defect.severity === 'high'
-                                      ? 'border-rose-900 bg-rose-950/60 text-rose-300'
-                                      : 'border-amber-900 bg-amber-950/60 text-amber-300'
+                                      ? 'border-rose-200 bg-rose-50 text-rose-800'
+                                      : 'border-amber-200 bg-amber-50 text-amber-800'
                                   }`}
                                 >
                                   {defect.severity}
                                 </span>
                               )}
                             </div>
-                            <p className="text-[11px] text-zinc-400 leading-normal font-sans">
+                            <p className="text-[11px] text-[#6B6A63] leading-normal font-sans">
                               {defect.description}
                             </p>
                           </div>
                         ))
                       ) : (
-                        <p className="text-xs text-zinc-500 font-mono italic">No defects recorded.</p>
+                        <p className="text-xs text-[#6B6A63] font-sans italic">No defects recorded.</p>
                       )}
                     </div>
                   </div>
@@ -294,9 +294,9 @@ export default function ProofPage() {
               </article>
 
               {/* Column 2: Built from Linted Spec */}
-              <article className="rounded-lg border border-emerald-900/40 bg-zinc-900/50 overflow-hidden flex flex-col">
+              <article className="rounded-[16px] border border-[#E4E2DA] bg-white overflow-hidden flex flex-col shadow-warm-xs">
                 {/* Screenshot Above */}
-                <div className="relative w-full aspect-video bg-zinc-950 border-b border-zinc-800/80 flex items-center justify-center overflow-hidden">
+                <div className="relative w-full aspect-video bg-[#F7F6F3] border-b border-[#E4E2DA] flex items-center justify-center overflow-hidden">
                   {data.lintedSpec.screenshot ? (
                     <img
                       src={data.lintedSpec.screenshot}
@@ -304,32 +304,32 @@ export default function ProofPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="p-8 text-center text-xs text-zinc-600 font-mono">
+                    <div className="p-8 text-center text-xs text-[#6B6A63] font-sans">
                       No screenshot provided in public/proof
                     </div>
                   )}
-                  <span className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-emerald-950/90 text-emerald-300 border border-emerald-800/80 font-bold backdrop-blur-xs">
-                    Linted Spec Build
+                  <span className="absolute top-3 left-3 px-2.5 py-0.5 text-[11px] font-sans uppercase tracking-wider rounded-full bg-white text-emerald-800 border border-emerald-200 font-medium shadow-xs">
+                    Linted spec build
                   </span>
                 </div>
 
                 <div className="p-5 sm:p-6 flex flex-col gap-4 flex-1">
                   <div>
-                    <h2 className="text-base font-semibold text-emerald-300 tracking-tight">
-                      {data.lintedSpec.title || 'Built from Linted Spec'}
+                    <h2 className="text-lg font-serif font-normal text-[#1B1B18] tracking-tight">
+                      {data.lintedSpec.title || 'Built from linted spec'}
                     </h2>
-                    <p className="text-xs text-zinc-300 mt-1 leading-relaxed font-sans">
+                    <p className="text-xs text-[#1B1B18]/80 mt-1 leading-relaxed font-sans">
                       {data.lintedSpec.summary}
                     </p>
                   </div>
 
                   {/* Defect List */}
-                  <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-zinc-800/80">
-                    <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-zinc-400 font-bold uppercase tracking-wider">
-                        Documented Defects
+                  <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-[#E4E2DA]">
+                    <div className="flex items-center justify-between text-xs font-sans">
+                      <span className="text-[#6B6A63] font-medium">
+                        Documented defects
                       </span>
-                      <span className="text-emerald-400 font-bold">
+                      <span className="text-emerald-800 font-medium">
                         {data.lintedSpec.defects?.length || data.lintedSpec.defectCount || 0} issues
                       </span>
                     </div>
@@ -339,19 +339,19 @@ export default function ProofPage() {
                         data.lintedSpec.defects.map((defect) => (
                           <div
                             key={defect.id}
-                            className="p-3 rounded-md bg-zinc-950/70 border border-zinc-800/80 flex flex-col gap-1 text-xs"
+                            className="p-3.5 rounded-[12px] bg-[#F8F8F7] border border-[#E4E2DA] flex flex-col gap-1 text-xs"
                           >
-                            <span className="font-mono text-[11px] font-bold text-emerald-300">
+                            <span className="font-mono text-[11px] font-medium text-[#1B1B18]">
                               {defect.id}: {defect.title}
                             </span>
-                            <p className="text-[11px] text-zinc-400 leading-normal font-sans">
+                            <p className="text-[11px] text-[#6B6A63] leading-normal font-sans">
                               {defect.description}
                             </p>
                           </div>
                         ))
                       ) : (
-                        <div className="p-4 rounded-md bg-emerald-950/20 border border-emerald-900/40 text-xs text-emerald-300 flex items-center gap-2 font-mono">
-                          <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <div className="p-4 rounded-[12px] bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex items-center gap-2 font-sans">
+                          <svg className="w-4 h-4 text-emerald-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
                           <span>Zero contradictions or defects. Specification executed cleanly.</span>
@@ -366,12 +366,12 @@ export default function ProofPage() {
         )}
 
         {/* Navigation Footer */}
-        <div className="pt-4 border-t border-zinc-800 flex justify-between items-center text-xs font-mono">
-          <Link href="/" className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition">
-            &larr; Return to Workspace
+        <div className="pt-6 border-t border-[#E4E2DA] flex justify-between items-center text-xs font-sans">
+          <Link href="/" className="text-[#1B1B18] font-medium hover:text-black flex items-center gap-1.5 transition">
+            &larr; Return to workspace
           </Link>
-          <Link href="/about" className="text-zinc-400 hover:text-zinc-200 flex items-center gap-1.5 transition">
-            Read Architecture &amp; Rules &rarr;
+          <Link href="/about" className="text-[#6B6A63] hover:text-[#1B1B18] flex items-center gap-1.5 transition">
+            Read architecture &amp; rules &rarr;
           </Link>
         </div>
       </main>

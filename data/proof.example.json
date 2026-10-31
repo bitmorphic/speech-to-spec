@@ -1,0 +1,64 @@
+{
+  "title": "Expense Sharing App Proof Benchmark [PLACEHOLDER]",
+  "description": "Comparative benchmark of coding agent output built from raw voice dictation versus built from Speech to Spec linted specification [PLACEHOLDER]",
+  "rawTranscript": {
+    "title": "Built from Raw Transcript [PLACEHOLDER]",
+    "screenshot": "/proof/raw-build.png",
+    "screenshotAlt": "Screenshot of coding agent result from raw voice transcript [PLACEHOLDER]",
+    "summary": "Agent attempted to implement directly from unparsed dictation with 4 unresolved contradictions and 6 missing decisions [PLACEHOLDER]",
+    "defectCount": 7,
+    "defects": [
+      {
+        "id": "DEF-01",
+        "title": "Anonymous vs Personal History Clash [PLACEHOLDER]",
+        "description": "App crashes because it tried to show individual balances while storing expenses anonymously without user IDs.",
+        "severity": "high"
+      },
+      {
+        "id": "DEF-02",
+        "title": "Offline WhatsApp Webhook Failure [PLACEHOLDER]",
+        "description": "Agent attempted to call a server-side notification webhook despite the offline browser-only requirement.",
+        "severity": "high"
+      },
+      {
+        "id": "DEF-03",
+        "title": "Inconsistent Rounding [PLACEHOLDER]",
+        "description": "Odd split amounts left fractional cents unassigned because rounding rules were unspecified in raw audio.",
+        "severity": "medium"
+      },
+      {
+        "id": "DEF-04",
+        "title": "Accidental Implementation of Struck Phrase [PLACEHOLDER]",
+        "description": "Built full SMS integration even though speaker said 'no wait, scratch that, just WhatsApp'.",
+        "severity": "medium"
+      },
+      {
+        "id": "DEF-05",
+        "title": "Missing Admin PIN Authentication [PLACEHOLDER]",
+        "description": "Delete button was exposed to all users without PIN protection because access control details were omitted.",
+        "severity": "high"
+      },
+      {
+        "id": "DEF-06",
+        "title": "Data Loss on Reload [PLACEHOLDER]",
+        "description": "Used in-memory JavaScript variables instead of persistent client storage because storage mechanism was unresolved.",
+        "severity": "high"
+      },
+      {
+        "id": "DEF-07",
+        "title": "Settlement Balance Inversion [PLACEHOLDER]",
+        "description": "Recording a settlement increased net debt rather than clearing it due to ambiguous transaction definitions.",
+        "severity": "medium"
+      }
+    ]
+  },
+  "lintedSpec": {
+    "title": "Built from Linted Spec [PLACEHOLDER]",
+    "screenshot": "/proof/linted-build.png",
+    "screenshotAlt": "Screenshot of coding agent result from Speech to Spec specification [PLACEHOLDER]",
+    "summary": "Agent built cleanly from Speech to Spec engineering specification with decisions log, acceptance checklist, and zero contradictions [PLACEHOLDER]",
+    "defectCount": 0,
+    "defects": []
+  }
+}
+

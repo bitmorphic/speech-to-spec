@@ -1,0 +1,5 @@
+The idea is a booking page for a small local clinic. Patients should be able to pick a doctor and time slots and book without creating an account, providing just their name and phone number.
+
+Slots are 30 minutes each. The doctor should see only her own appointments when she logs in and the receptionist sees everything. Patients can cancel only up to 2 hours before. Send SMS confirmations to the patient. We don't collect emails.
+
+It should work on the phone first. The receptionist dashboard is mostly for desktop and patients should be able to see their booking history. We don't want to store personal data though. 

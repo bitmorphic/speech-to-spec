@@ -1,0 +1,8 @@
+I want to build an expense splitter for our hostel, Floor 1. Anyone on the floor can add an expense, like when someone buys snacks or pays for the Wi-Fi, and let people choose who was part of each expense. Everything should be saved in the browser only and I don't want to set up a database.
+- No login: keep it super simple. Just open the link and use it.
+- Each person should be able to see their own balance, how much they owe, and how much they are owed. Nobody else should see it.
+- There should be one total screen where everyone can see who owes whom.
+- The app should send a WhatsApp reminder to people who owe more than ₹500.
+- It should work offline.
+- I want the admin of the floor to be able to delete wrong expenses.
+Floors can have maybe 30 people or 50, whatever.

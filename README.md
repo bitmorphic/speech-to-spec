@@ -4,7 +4,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="public/logo/new-logo.png">
-  <img src="public/logo/new-logo.png" alt="Speech to Spec Logo" width="240">
+  <img src="public/logo/new-logo.png" alt="Speech to Spec Logo" width="360">
 </picture>
 
 # Speech to Spec

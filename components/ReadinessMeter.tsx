@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { Contradiction, MissingDecision, Question } from '@/lib/types';
+import { calculateReadinessScore } from '@/lib/readiness';
 
 export interface ReadinessMeterProps {
   contradictions?: Contradiction[];
@@ -16,59 +17,8 @@ export function ReadinessMeter({
   questions = [],
   answers = {},
 }: ReadinessMeterProps) {
-  // Baseline initial score before any answers are given
-  const baselineScore = useMemo(() => {
-    let penalty = 0;
-    for (const c of contradictions) {
-      if (c.severity === 'high') {
-        penalty += 15;
-      } else {
-        penalty += 8;
-      }
-    }
-    penalty += missingDecisions.length * 4;
-    return Math.max(0, 100 - penalty);
-  }, [contradictions, missingDecisions]);
-
-  // Dynamic current score as questions are answered
-  const currentScore = useMemo(() => {
-    // Map each finding id to its unanswered factor (0 = resolved, 0.5 = you decide, 1 = unanswered)
-    const getFindingUnansweredFactor = (findingId: string): number => {
-      const tiedQuestions = questions.filter(
-        (q) => q.relatesTo && q.relatesTo.includes(findingId)
-      );
-
-      // If no question covers this finding, it remains fully open
-      if (tiedQuestions.length === 0) return 1.0;
-
-      let sumFactor = 0;
-      for (const q of tiedQuestions) {
-        const ans = answers[q.id];
-        if (ans?.youDecide) {
-          sumFactor += 0.5; // You decide counts as half
-        } else if (ans?.text && ans.text.trim().length > 0) {
-          sumFactor += 0.0; // Answered
-        } else {
-          sumFactor += 1.0; // Unanswered
-        }
-      }
-
-      return sumFactor / tiedQuestions.length;
-    };
-
-    let penalty = 0;
-    for (const c of contradictions) {
-      const factor = getFindingUnansweredFactor(c.id);
-      const basePenalty = c.severity === 'high' ? 15 : 8;
-      penalty += basePenalty * factor;
-    }
-
-    for (const md of missingDecisions) {
-      const factor = getFindingUnansweredFactor(md.id);
-      penalty += 4 * factor;
-    }
-
-    return Math.max(0, Math.min(100, Math.round(100 - penalty)));
+  const { baselineScore, currentScore } = useMemo(() => {
+    return calculateReadinessScore(contradictions, missingDecisions, questions, answers);
   }, [contradictions, missingDecisions, questions, answers]);
 
   const scoreColor =

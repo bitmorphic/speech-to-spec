@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "timestamp": 1730370000000,
+  "transcript": "I want to build an expense splitter for our hostel, Floor 1. Anyone on the floor can add an expense, like when someone buys snacks or pays for the Wi-Fi, and let people choose who was part of each expense. Everything should be saved in the browser only and I don't want to set up a database.\r\n- No login: keep it super simple. Just open the link and use it.\r\n- Each person should be able to see their own balance, how much they owe, and how much they are owed. Nobody else should see it.\r\n- There should be one total screen where everyone can see who owes whom.\r\n- The app should send a WhatsApp reminder to people who owe more than ₹500.\r\n- It should work offline.\r\n- I want the admin of the floor to be able to delete wrong expenses.\r\nFloors can have maybe 30 people or 50, whatever. Actually scratch that, let's make sure the floor admin can export the database before deleting anything.",
+  "lintResult": {
+    "summary": "The user wants an offline-capable, browser-only hostel expense splitting web application for 30-50 people with no login, private personal balances, a shared overall debt screen, admin expense deletion capabilities, and automated WhatsApp reminders for debts exceeding ₹500.",
+    "selfCorrections": [
+      {
+        "id": "sc-1",
+        "earlierQuote": "I want the admin of the floor to be able to delete wrong expenses.",
+        "finalQuote": "let's make sure the floor admin can export the database before deleting anything",
+        "resolution": "Admin must be prompted to export data backup before confirming deletion of any expense record."
+      }
+    ],
+    "contradictions": [
+      {
+        "id": "c-1",
+        "severity": "high",
+        "quoteA": "Everything should be saved in the browser only",
+        "quoteB": "There should be one total screen where everyone can see who owes whom.",
+        "why": "If data is stored strictly in one local browser without a database or network sync, expenses added by individual floor members cannot be shared across 30 to 50 separate devices to populate a shared total screen."
+      },
+      {
+        "id": "c-2",
+        "severity": "high",
+        "quoteA": "Nobody else should see it.",
+        "quoteB": "No login: keep it super simple.",
+        "why": "Restricting visibility so each user can only view their own balance requires a user identity mechanism, which is precluded by having no login system."
+      },
+      {
+        "id": "c-3",
+        "severity": "high",
+        "quoteA": "I want the admin of the floor to be able to delete wrong expenses.",
+        "quoteB": "No login: keep it super simple.",
+        "why": "Restricting deletion rights exclusively to an admin requires user identification and authorization roles, which conflicts directly with allowing anonymous access without login."
+      },
+      {
+        "id": "c-4",
+        "severity": "medium",
+        "quoteA": "The app should send a WhatsApp reminder to people who owe more than ₹500.",
+        "quoteB": "It should work offline.",
+        "why": "Sending WhatsApp messages automatically requires network connectivity and external messaging APIs, which cannot function entirely offline without network access."
+      },
+      {
+        "id": "c-5",
+        "severity": "medium",
+        "quoteA": "Nobody else should see it.",
+        "quoteB": "There should be one total screen where everyone can see who owes whom.",
+        "why": "Enforcing strict privacy where no one else can see an individual's balance directly conflicts with displaying a floor-wide total screen showing everyone who owes whom."
+      }
+    ],
+    "missingDecisions": [
+      {
+        "id": "md-1",
+        "topic": "WhatsApp Integration Method",
+        "whyItMatters": "The system needs to define whether WhatsApp messages are sent via background automated APIs or by triggering wa.me deep links on user devices, as well as how phone numbers are collected."
+      },
+      {
+        "id": "md-2",
+        "topic": "Data Sharing and Synchronization",
+        "whyItMatters": "Without a backend database, implementers must decide how expense data is transferred between devices (such as manual JSON file export/import or P2P WebRTC sync)."
+      },
+      {
+        "id": "md-3",
+        "topic": "Admin Authentication Mechanism",
+        "whyItMatters": "Because full authentication is rejected, a lightweight privilege model (like a local floor PIN or admin key) is needed to authorize deleting expenses."
+      },
+      {
+        "id": "md-4",
+        "topic": "Settlement and Payment Recording",
+        "whyItMatters": "The transcript specifies tracking who owes whom but does not define how roommate payments and balance settlements are recorded or cleared."
+      },
+      {
+        "id": "md-5",
+        "topic": "Rounding Rules for Expense Splits",
+        "whyItMatters": "Splitting odd expense amounts across up to 50 people produces fractional currency values, requiring defined rounding rules."
+      }
+    ],
+    "questions": [
+      {
+        "id": "q-1",
+        "question": "How should expense data be shared among floor members if no database is used?",
+        "relatesTo": [
+          "c-1",
+          "md-2"
+        ],
+        "options": [
+          "Use manual JSON or QR code export/import between devices",
+          "Introduce a lightweight backend database for real-time synchronization",
+          "Run the application on a single shared physical device kept on the floor"
+        ]
+      },
+      {
+        "id": "q-2",
+        "question": "How should user identity and admin permissions be managed without a login system?",
+        "relatesTo": [
+          "c-2",
+          "c-3",
+          "md-3"
+        ],
+        "options": [
+          "Use local passcode/PIN entry to switch user and admin profiles",
+          "Select names from a public dropdown with a shared admin password for deletions",
+          "Implement basic login accounts with identity-based permissions"
+        ]
+      },
+      {
+        "id": "q-3",
+        "question": "How should WhatsApp reminders be dispatched while respecting offline constraints?",
+        "relatesTo": [
+          "c-4",
+          "md-1"
+        ],
+        "options": [
+          "Generate a wa.me pre-filled link that opens WhatsApp on the user's phone",
+          "Use a cloud messaging server to send automated WhatsApp messages when online",
+          "Display on-screen reminder alerts prompting the user to send manual messages"
+        ]
+      },
+      {
+        "id": "q-4",
+        "question": "How should balance privacy be reconciled with the total screen showing who owes whom?",
+        "relatesTo": [
+          "c-5"
+        ],
+        "options": [
+          "Display all balances publicly on the total screen for full transparency",
+          "Show total net balances on the summary screen but mask detailed breakdown per person",
+          "Require user PIN entry before revealing individual balance details"
+        ]
+      },
+      {
+        "id": "q-5",
+        "question": "How should member settlements and payments be recorded in the system?",
+        "relatesTo": [
+          "md-4"
+        ],
+        "options": [
+          "Allow users to log explicit settlement payment transactions",
+          "Mark whole expenses as resolved to clear debts",
+          "Recalculate balances only when wrong expenses are deleted by an admin"
+        ]
+      }
+    ]
+  },
+  "answers": {
+    "q-1": {
+      "text": "Run the application on a single shared physical device kept on the floor",
+      "youDecide": false
+    },
+    "q-2": {
+      "text": "Use local passcode/PIN entry to switch user and admin profiles",
+      "youDecide": false
+    },
+    "q-3": {
+      "text": "Generate a wa.me pre-filled link that opens WhatsApp on the user's phone",
+      "youDecide": false
+    },
+    "q-4": {
+      "text": "Show total net balances on the summary screen but mask detailed breakdown per person",
+      "youDecide": false
+    },
+    "q-5": {
+      "text": "Allow users to log explicit settlement payment transactions",
+      "youDecide": false
+    }
+  },
+  "specResult": {
+    "specMarkdown": "# Known Conflicts\n\n- **Conflict c-1**: *Data storage vs shared total screen*\n  - *Description*: The transcript requires that all expense data be saved only in the browser, yet also wants a total screen where everyone can see who owes whom. Storing data only locally on individual devices prevents sharing across multiple devices.\n  - *Suggested fix*: Run the application on a single shared physical device (e.g., a tablet) kept on the floor. The device stores all data locally in the browser, satisfying both the \"browser‑only\" constraint and the shared total screen requirement.\n\n- **Conflict c-2**: *Privacy vs no login*\n  - *Description*: Users should only see their own balances, but the system has no login mechanism to identify users.\n  - *Suggested fix*: Implement a lightweight local passcode/PIN system. Each user selects a personal PIN on first use; the PIN is stored locally (hashed) and used to unlock their private balance view. No external authentication service is required.\n\n- **Conflict c-3**: *Admin deletion vs no login*\n  - *Description*: Only an admin should be able to delete wrong expenses, yet there is no login to distinguish the admin.\n  - *Suggested fix*: Use a dedicated admin PIN (different from regular user PINs). The admin PIN is set during initial setup and is required to perform deletions.\n\n- **Conflict c-4**: *WhatsApp reminders vs offline operation*\n  - *Description*: The app must work offline, but sending WhatsApp messages automatically requires network connectivity.\n  - *Suggested fix*: Provide a pre‑filled `wa.me` link for each qualifying debt. The user can tap the link when the device is online; the app does not attempt to send messages automatically while offline.\n\n- **Conflict c-5**: *Privacy vs total debt screen*\n  - *Description*: Individual balances must be private, yet a total screen should display who owes whom. Showing exact amounts would expose private data.\n  - *Suggested fix*: Show only net relationships (e.g., \"Alice → Bob\") on the total screen, masking the exact amount. Detailed amounts are visible only in a user’s private balance view after PIN entry.\n\n# Overview\nThe application is a web‑based expense‑splitting tool for a hostel floor (30‑50 members). It runs entirely in the browser, stores all data locally on a single shared device, requires no external login, and works offline after the initial load.\n\n# Goals\n- Enable any floor member to record an expense and select participants.\n- Provide each member a private view of their personal balance after authenticating with a local PIN.\n- Show a shared summary screen that lists who owes whom (net relationships) without revealing exact amounts.\n- Allow the floor admin (admin PIN) to delete erroneous expense entries.\n- Generate WhatsApp reminder links for debts exceeding ₹500.\n- Operate fully offline except when the user chooses to open a WhatsApp link.\n- Support up to 50 users on a single device.\n\n# Non-goals\n- No cloud backend, real‑time synchronization, or multi‑device collaboration.\n- No automated messaging service; WhatsApp reminders are user‑initiated.\n- No integration with payment processors.\n- No complex authentication (OAuth, SSO) – only local PINs.\n- No support for more than one concurrent device.\n\n# Users\n- **Floor Member** – can add expenses, view personal balance, see summary, log settlements.\n- **Floor Admin** – same as member plus ability to delete any expense after entering admin PIN.\n- **Device Facilitator** – person who initially configures the app on the shared device (sets admin PIN, adds user names and PINs).\n\n# Core Features\n1. **Expense Entry** – description, total amount, participants (multi‑select), automatic equal split.\n2. **Personal Balance View** – after PIN entry, shows net amount the user owes or is owed.\n3. **Summary Screen** – lists net debtor‑creditor pairs (e.g., “Alice → Bob”) without amounts; highlights debts > ₹500 with a “Remind on WhatsApp” button.\n4. **Admin Deletion** – admin PIN required to delete an expense; balances recalc automatically.\n5. **WhatsApp Reminder** – generates a `wa.me` link containing a pre‑filled message with debtor’s name and amount.\n6. **Settlement Logging** – users can record a payment transaction (payer, payee, amount) to clear debts.\n7. **Data Export / Import** – manual JSON export for backup and optional import to a new device.\n8. **Offline‑First Operation** – all features work without network; only WhatsApp link requires connectivity.\n\n# Data and Storage\n- **Storage Engine**: IndexedDB (fallback to LocalStorage if unavailable). All data is persisted locally on the device.\n- **Schema**:\n  - `users` – `{id, name, pinHash}`\n  - `expenses` – `{id, description, amount, participantIds[], createdAt, createdByUserId}`\n  - `settlements` – `{id, payerId, payeeId, amount, createdAt}`\n  - `settings` – `{adminPinHash}`\n- **Export**: Generates a JSON blob containing the full database.\n- **Import**: Replaces current local data after user confirmation and schema validation.\n\n# Screens and Flows\n1. **Welcome / User Select** – dropdown of user names, PIN entry. First‑time users can set their PIN.\n2. **Home Dashboard** – buttons: Add Expense, My Balance, Summary, Settlements, Settings.\n3. **Add Expense** – form fields: Description, Amount (₹), Participants (checkbox list), Submit.\n4. **My Balance** – after PIN, shows net balance (positive = others owe me, negative = I owe). Button to view settlement history.\n5. **Summary** – list of debtor → creditor pairs. Rows with debt > ₹500 display “Remind on WhatsApp” button.\n6. **Settlement Entry** – select payer, payee, amount, date; adds settlement record.\n7. **Admin Delete** – long‑press or swipe on an expense entry → Delete button → admin PIN prompt → deletion.\n8. **Settings** – set/change admin PIN, manage user PINs, export data, import data.\n\n# Rules and Edge Cases\n- **Expense Split**: Amount is divided equally among participants. Result is rounded to the nearest rupee (half‑up). Any rounding remainder is added to the first participant (alphabetical order) to keep total unchanged.\n- **Balance Calculation**: For each user: `balance = sum(share of expenses) - sum(settlements where user is payer) + sum(settlements where user is payee)`.\n- **Debt Threshold**: WhatsApp reminder button appears only for debts > ₹500.\n- **Offline Mode**: All UI actions (add, delete, settlement) work offline. WhatsApp button is disabled when `navigator.onLine` is false.\n- **Admin Deletion**: After deletion, all balances are recomputed from scratch to ensure consistency.\n- **Data Import**: Import overwrites all existing data; a confirmation dialog warns the user.\n- **PIN Security**: PINs are stored as salted SHA‑256 hashes (client‑side). No plaintext PINs are persisted.\n\n# Assumptions\n- The floor uses a **single shared device** (tablet or laptop) that stays on the floor; all members interact with the same browser instance.\n- Users know their personal 4‑digit PIN; the admin PIN is known only to the floor admin.\n- Phone numbers for WhatsApp reminders are entered during user setup and are valid.\n- The device’s browser supports IndexedDB; otherwise, LocalStorage will be used with reduced capacity.\n- The app is accessed via modern browsers (Chrome, Edge, Firefox) on desktop or tablet.\n\n# Open Items\n| ID | Topic | Recommended Default |\n|----|-------|----------------------|\n| O-1 | Rounding Rules for Expense Splits | Round to the nearest rupee (half‑up). Any remainder is assigned to the first participant alphabetically. |\n| O-2 | Offline Persistence Fallback | If IndexedDB is unavailable, fallback to LocalStorage with JSON serialization. |\n| O-3 | UI Design for Masked Balances | Show only debtor → creditor names on the summary screen; exact amounts are revealed only after PIN entry. |\n| O-4 | Conflict Resolution for Simultaneous Edits | Not applicable due to single‑device usage; no concurrency handling required. |\n\n# Decisions Log\n| ID | Decision | Source | Details |\n|----|----------|--------|---------|\n| D1 | Data sharing method – single shared physical device | Answer q-1 (conservative default) | All data lives locally on the device; no network sync. |\n| D2 | User identity – local PIN entry | Answer q-2 (conservative default) | Users select their name and enter a 4‑digit PIN to unlock private views. |\n| D3 | Admin authentication – dedicated admin PIN | Answer q-2 (conservative default) | Admin PIN set during initial setup; required for deletions. |\n| D4 | WhatsApp reminder mechanism – generate `wa.me` link | Answer q-3 (conservative default) | Link is displayed; user taps to open WhatsApp when online. |\n| D5 | Balance privacy – mask detailed amounts on summary | Answer q-4 (conservative default) | Summary shows only “Who owes whom” without amounts. |\n| D6 | Settlement recording – explicit payment transaction logging | Answer q-5 (conservative default) | Users can add settlement entries to clear debts. |\n| D7 | Data storage engine – IndexedDB (fallback LocalStorage) | Assumption | Guarantees offline persistence. |\n| D8 | Rounding rule – nearest rupee, remainder to first participant | Open Item O-1 | Ensures deterministic splits. |\n| D9 | Export/Import format – JSON blob of full database | Assumption | Enables manual backup & transfer. |\n| D10 | UI flow – single‑device access pattern | Assumption | Aligns with data sharing decision. |\n\n# Acceptance Checklist\n- [ ] Users can add an expense, select participants, and the amount is split equally with rounding applied.\n- [ ] After entering their PIN, a user can view only their own net balance.\n- [ ] The summary screen lists debtor → creditor pairs without showing amounts; debts > ₹500 display a WhatsApp reminder button.\n- [ ] Admin can delete any expense after entering the admin PIN, and balances are recomputed correctly.\n- [ ] Clicking the WhatsApp reminder button opens a pre‑filled `wa.me` link with the correct amount and debtor name.\n- [ ] All core features (add, view, delete, settlement) work when the device is offline.\n- [ ] Data persists across page reloads and browser restarts using IndexedDB (or LocalStorage fallback).\n- [ ] Users can export the entire dataset as a JSON file and import it on another device.\n- [ ] Settlement transactions can be recorded and affect subsequent balance calculations.\n- [ ] Rounding follows the defined rule (nearest rupee, remainder to first participant).\n- [ ] No user can view another member’s detailed balance without the correct PIN.\n- [ ] Admin PIN and user PINs are stored hashed, not in plaintext.\n- [ ] The app loads and runs on modern browsers (Chrome/Edge/Firefox) on desktop or tablet.\n\n",
+    "answerConflicts": []
+  }
+}

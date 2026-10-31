@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -10,11 +10,30 @@ interface AppHeaderProps {
   onOpenRecent?: () => void;
   recentCount?: number;
   stepperSlot?: React.ReactNode;
+  showProof?: boolean;
 }
 
-export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHeaderProps) {
+export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot, showProof }: AppHeaderProps) {
   const pathname = usePathname();
   const { setIsSettingsOpen, userApiKey } = useSettings();
+  const [hasValidCases, setHasValidCases] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (typeof showProof === 'boolean') {
+      setHasValidCases(showProof);
+      return;
+    }
+    fetch('/api/cases')
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data?.hasCases === 'boolean') {
+          setHasValidCases(data.hasCases);
+        }
+      })
+      .catch(() => {});
+  }, [showProof]);
+
+  const shouldRenderProof = showProof !== undefined ? showProof : hasValidCases;
 
   const isWorkspace = pathname === '/' || pathname === '';
   const isProof = pathname === '/proof';
@@ -60,16 +79,18 @@ export function AppHeader({ onOpenRecent, recentCount = 0, stepperSlot }: AppHea
               Workspace
             </Link>
 
-            <Link
-              href="/proof"
-              className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${
-                isProof
-                  ? 'bg-[#1B1B18] text-white'
-                  : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
-              }`}
-            >
-              Proof
-            </Link>
+            {shouldRenderProof && (
+              <Link
+                href="/proof"
+                className={`px-3 py-1.5 text-xs rounded-full font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${
+                  isProof
+                    ? 'bg-[#1B1B18] text-white'
+                    : 'text-[#6B6A63] hover:text-[#1B1B18] hover:bg-[#F3F2EE]'
+                }`}
+              >
+                Proof
+              </Link>
+            )}
 
             <Link
               href="/about"

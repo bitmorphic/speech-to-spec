@@ -8,7 +8,7 @@ export interface TranscriptHighlighterProps {
   transcript: string;
   lintResult: LintResponseSuccess;
   activeFindingId: string | null;
-  onSelectFinding: (findingId: string) => void;
+  onSelectFinding?: (findingId: string) => void;
 }
 
 interface SpanMatch {
@@ -212,7 +212,7 @@ export function TranscriptHighlighter({
         <mark
           key={`span-${idx}-${span.findingId}`}
           data-finding-id={span.findingId}
-          onClick={() => onSelectFinding(span.findingId)}
+          onClick={() => onSelectFinding?.(span.findingId)}
           className={`cursor-pointer transition-all select-text focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:outline-none ${styleClasses} ${
             isActive
               ? 'ring-2 ring-[#2563EB] ring-offset-2 ring-offset-white'
@@ -223,7 +223,7 @@ export function TranscriptHighlighter({
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              onSelectFinding(span.findingId);
+              onSelectFinding?.(span.findingId);
             }
           }}
         >

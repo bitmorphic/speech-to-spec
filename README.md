@@ -67,6 +67,19 @@ For offline development and rapid testing without consuming any Groq API tokens:
 
 ---
 
+## Real Case Studies (`data/cases/`)
+
+The `/proof` page displays empirical case studies loaded directly from server session exports in `data/cases/`.
+
+### How to Add a Case Study
+
+1. **Run a session in the app**: Lint your spoken transcript, answer or delegate clarifying questions, and generate your engineering specification.
+2. **Download session export**: In the **AI Build Pack** section at the bottom of the Spec view, click **"Download session JSON"**.
+3. **Save to `data/cases/`**: Place the exported `.json` file inside `data/cases/` using a descriptive kebab-case filename (e.g., `data/cases/hostel-expense-splitter.json` or `data/cases/ecommerce-checkout.json`).
+4. **Automatic loading**: The server automatically validates the exported session schema, generates a tab label from the filename, computes transcript metrics, and exposes the **Said**, **Found**, **Decided**, and **Spot-It-First** verification views on `/proof`. If no valid cases exist, the `/proof` route returns a 404 page and hides the link from navigation.
+
+---
+
 ## Privacy & Security Note
 
 - **Zero Logging Policy**: Raw speech transcripts, generated specifications, and API keys are **never** logged to stdout, files, analytics services, or error tracking.

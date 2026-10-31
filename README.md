@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/banner/wispr-challenge-banner.png" alt="No Hands: The Wispr Challenge Hackathon Banner" width="100%">
+</p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="public/logo/logo-dark.png">
   <img src="public/logo/logo-light.png" alt="Speech to Spec Logo" width="120">

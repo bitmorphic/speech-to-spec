@@ -3,7 +3,7 @@
 </p>
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="public/logo/logo-dark.png">
+  <source media="(prefers-color-scheme: dark)" srcset="public/logo/new-logo.png">
   <img src="public/logo/new-logo.png" alt="Speech to Spec Logo" width="120">
 </picture>
 
